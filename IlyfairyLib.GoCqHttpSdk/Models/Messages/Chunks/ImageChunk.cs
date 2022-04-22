@@ -1,4 +1,6 @@
-﻿namespace IlyfairyLib.GoCqHttpSdk.Models.Chunks;
+﻿using Newtonsoft.Json.Linq;
+
+namespace IlyfairyLib.GoCqHttpSdk.Models.Chunks;
 
 /// <summary>
 /// 图片消息
@@ -23,5 +25,14 @@ public sealed class ImageChunk : MessageChunk
         File = file;
         Url = url;
         IsFlash = isFlash;
+    }
+
+    public static new ImageChunk? Parse(JToken json)
+    {
+        var data = json["data"];
+        var image = new ImageChunk(data.Value<string>("file"), data.Value<string>("url"), data.Value<bool>("flash"));
+        image.Data = data as JObject;
+        return image;
+
     }
 }

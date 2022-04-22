@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace IlyfairyLib.GoCqHttpSdk.Api
@@ -22,6 +23,23 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
                 new(v => func((v as PrivateMessage)!)),
                 MessageType.PrivateMessage,
                 () => true));
+        }
+
+        public static void MapGroup(this Session session, string regex, Func<GroupMessage, GroupCollection, Task> func)
+        {
+            session.MessageFuncs.Add((
+              new(async v =>
+              {
+                  var msg = (v as GroupMessage);
+                  Match match = Regex.Match(msg.RawMessage, regex);
+                  if (match.Success)
+                  {
+                      await func(msg, match.Groups);
+                  }
+                  return true;
+              }),
+              MessageType.GroupMessage,
+              () => true));
         }
     }
 }

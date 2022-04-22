@@ -33,7 +33,7 @@ public static partial class MessageApiExtentsion
         var result = await SendApiAsync(server, action, @params);
 
 #if DEBUG
-        Console.WriteLine($"api result: \n{result}");
+        //Console.WriteLine($"api result: \n{result}");
 #endif
 
         try
@@ -73,6 +73,30 @@ public static partial class MessageApiExtentsion
         var json = JsonEx.Create()
             .Set("group_id", groupId)
             .Set("message", message.ToJArray());
+
+        var result = await SendApiMessageAsync(server, ApiActionType.SendGroupMessage, json);
+        if (result.Success)
+        {
+            return result.Data?.Value<int>("message_id");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 发送原始CQ群消息
+    /// </summary>
+    /// <param name="server"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="message">消息</param>
+    /// <returns></returns>
+    public static async Task<int?> SendRawGroupMessageAsync(this Session server, long groupId, string message)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("message", message);
 
         var result = await SendApiMessageAsync(server, ApiActionType.SendGroupMessage, json);
         if (result.Success)

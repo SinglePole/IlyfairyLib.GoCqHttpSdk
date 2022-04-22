@@ -35,16 +35,18 @@ public sealed class AtChunk : MessageChunk
 
     public static new AtChunk? Parse(JToken json)
     {
+        AtChunk? result;
         if (json["data"]?.Value<string>("qq") is string qq)
         {
             if (qq == "all")
             {
-                return All;
+                result = All;
             }
             else
             {
-                return new AtChunk(long.Parse(qq));
+                result = new AtChunk(long.Parse(qq));
             }
+            result.Data = json as JObject;
         }
         return null;
     }

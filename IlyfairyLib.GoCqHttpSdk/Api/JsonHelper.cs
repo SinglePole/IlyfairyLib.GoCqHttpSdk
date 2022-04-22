@@ -19,7 +19,6 @@ public static class JsonHelper
         {
             array.Add(chunk.ToJson());
         }
-        Console.WriteLine(array);
         return array;
     }
 }

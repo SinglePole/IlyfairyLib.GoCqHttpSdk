@@ -1,8 +1,6 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.Messages;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace IlyfairyLib.GoCqHttpSdk.Models.Chunks;
 
@@ -12,7 +10,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.Chunks;
 public abstract class MessageChunk
 {
     public abstract MessageChunkType Type { get; }
-    public virtual JObject Data { get; }
+    public virtual JObject Data { get; protected set; }
     public MessageChunk()
     {
         Data = new JObject();
@@ -61,10 +59,28 @@ public abstract class MessageChunk
 
     internal static MessageChunk? Parse(JToken json)
     {
-        return json.Value<string>("type") switch
+        if (json == null) return null;
+        var type = json.Value<string>("type");
+        return type switch
         {
-            "at" => AtChunk.Parse(json),
             "text" => TextChunk.Parse(json),
+            "image" => ImageChunk.Parse(json),
+            "at" => AtChunk.Parse(json),
+            "video" => VideoChunk.Parse(json),
+            "rps" => RpsChunk.Parse(json),
+            "dice" => DiceChunk.Parse(json),
+            "shake" => ShakeChunk.Parse(json),
+            "poke" => PokeChunk.Parse(json),
+            "share" => ShareChunk.Parse(json),
+            "contact" => ContactChunk.Parse(json),
+            "location" => LocationChunk.Parse(json),
+            "music" => MusicChunk.Parse(json),
+            "reply" => ReplyChunk.Parse(json),
+            "forward" => ForwardChunk.Parse(json),
+            "node" => NodeChunk.Parse(json),
+            "xml" => XmlChunk.Parse(json),
+            "json" => JsonChunk.Parse(json),
+            "tts" => TtsChunk.Parse(json),
             _ => null,
         };
     }

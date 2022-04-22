@@ -1,5 +1,4 @@
-﻿using IlyfairyLib.GoCqHttpSdk.Models.Messages;
-using IlyfairyLib.GoCqHttpSdk.Models.Shared;
+﻿using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using Newtonsoft.Json.Linq;
 
 namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;

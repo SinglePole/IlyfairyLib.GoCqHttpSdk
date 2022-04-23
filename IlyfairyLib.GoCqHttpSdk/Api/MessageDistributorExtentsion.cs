@@ -56,7 +56,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
               MessageType.GroupMessage));
         }
 
-                /// <summary>
+        /// <summary>
         /// 将正则表达式映射到群消息
         /// </summary>
         /// <param name="session">会话</param>
@@ -89,6 +89,42 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
             session.ExceptionFuncs.Add((
               func,
               MessageType.Exception));
+        }
+
+        /// <summary>
+        /// 创建WebSocket连接中间件
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="func">回调<br/>参数True代表WebSocket连接成功否则断开</param>
+        public static void UseWebSocketConnect(this Session session, Func<bool, Task<bool>> func)
+        {
+            session.ConnectionFuncs.Add((
+              func,
+              MessageType.Exception));
+        }
+
+        /// <summary>
+        /// 创建生命周期息中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
+        public static void UseLifecycle(this Session session, Func<LifecycleMessage, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as LifecycleMessage)!)),
+                MessageType.Lifecycle));
+        }
+        
+        /// <summary>
+        /// 创建心跳包中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
+        public static void UseHeartbeat(this Session session, Func<HeartbeatMessage, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as HeartbeatMessage)!)),
+                MessageType.Heartbeat));
         }
     }
 }

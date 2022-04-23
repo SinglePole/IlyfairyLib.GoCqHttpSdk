@@ -106,9 +106,9 @@ internal static class MessageProcExtentsion
                 {
                     try
                     {
-                        foreach (var item in session.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        foreach (var exFunc in session.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
                         {
-                            await item.func(message, e);
+                            await exFunc.func(message, e);
                         }
                     }
                     catch { }

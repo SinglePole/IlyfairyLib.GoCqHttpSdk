@@ -1,5 +1,6 @@
 ﻿
 global using System;
+global using System.Linq;
 global using Newtonsoft.Json.Linq;
 global using IlyfairyLib.GoCqHttpSdk.Models;
 global using IlyfairyLib.GoCqHttpSdk.Api;
@@ -8,6 +9,7 @@ global using IlyfairyLib.GoCqHttpSdk.Models.Messages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Websocket.Client;
+
 
 namespace IlyfairyLib.GoCqHttpSdk;
 public class Session
@@ -29,14 +31,48 @@ public class Session
     private void WebSocketSubscribeInit()
     {
         //断开
-        WsClient.DisconnectionHappened.Subscribe(disInfo =>
+        WsClient.DisconnectionHappened.Subscribe(async disInfo =>
         {
-            //Console.WriteLine("Disconnect");
+            foreach (var item in ConnectionFuncs)
+            {
+                try
+                {
+                    await item.func(false);
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        foreach (var exFunc in this.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        {
+                            await exFunc.func(null, e);
+                        }
+                    }
+                    catch { }
+                }
+            }
         });
         //连接/重新连接
-        WsClient.ReconnectionHappened.Subscribe(reInfo =>
+        WsClient.ReconnectionHappened.Subscribe(async reInfo =>
         {
-            //Console.WriteLine($"Reconnect {reInfo.Type}");
+            foreach (var item in ConnectionFuncs)
+            {
+                try
+                {
+                    await item.func(true);
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        foreach (var exFunc in this.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        {
+                            await exFunc.func(null, e);
+                        }
+                    }
+                    catch { }
+                }
+            }
         });
     }
     public async void Build()
@@ -56,4 +92,5 @@ public class Session
 
     internal List<(Func<MessageEventBase, Task<bool>> func, MessageType type)> MessageFuncs { get; } = new();
     internal List<(Func<MessageEventBase, Exception, Task<bool>> func, MessageType type)> ExceptionFuncs { get; } = new();
+    internal List<(Func<bool, Task<bool>> func, MessageType type)> ConnectionFuncs { get; } = new();
 }

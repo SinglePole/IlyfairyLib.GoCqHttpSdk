@@ -20,5 +20,4 @@ public enum MessageType
     NoticePoke, //群内戳一戳
     NoticeLuckyKing, //群红包运气王
     NoticeHonor, //群成员荣誉变更
-    Exception, //异常
 }

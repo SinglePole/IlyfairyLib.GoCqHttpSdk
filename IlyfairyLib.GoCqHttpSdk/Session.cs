@@ -37,15 +37,15 @@ public class Session
             {
                 try
                 {
-                    await item.func(false);
+                    await item(false);
                 }
                 catch (Exception e)
                 {
                     try
                     {
-                        foreach (var exFunc in this.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        foreach (var exFunc in this.ExceptionFuncs)
                         {
-                            await exFunc.func(null, e);
+                            await exFunc(null, e);
                         }
                     }
                     catch { }
@@ -59,15 +59,15 @@ public class Session
             {
                 try
                 {
-                    await item.func(true);
+                    await item(true);
                 }
                 catch (Exception e)
                 {
                     try
                     {
-                        foreach (var exFunc in this.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        foreach (var exFunc in this.ExceptionFuncs)
                         {
-                            await exFunc.func(null, e);
+                            await exFunc(null, e);
                         }
                     }
                     catch { }
@@ -91,6 +91,6 @@ public class Session
     }
 
     internal List<(Func<MessageEventBase, Task<bool>> func, MessageType type)> MessageFuncs { get; } = new();
-    internal List<(Func<MessageEventBase, Exception, Task<bool>> func, MessageType type)> ExceptionFuncs { get; } = new();
-    internal List<(Func<bool, Task<bool>> func, MessageType type)> ConnectionFuncs { get; } = new();
+    internal List<Func<MessageEventBase, Exception, Task<bool>>> ExceptionFuncs { get; } = new();
+    internal List<Func<bool, Task<bool>>> ConnectionFuncs { get; } = new();
 }

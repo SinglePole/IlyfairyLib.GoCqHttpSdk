@@ -91,7 +91,6 @@ internal static class MessageProcExtentsion
         });
     }
 
-
     internal static async Task Distribution(this Session session, MessageEventBase message)
     {
         await Task.Run(async () =>
@@ -107,9 +106,9 @@ internal static class MessageProcExtentsion
                 {
                     try
                     {
-                        foreach (var exFunc in session.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        foreach (var exFunc in session.ExceptionFuncs)
                         {
-                            await exFunc.func(message, e);
+                            await exFunc(message, e);
                         }
                     }
                     catch { }
@@ -117,5 +116,4 @@ internal static class MessageProcExtentsion
             }
         });
     }
-
 }

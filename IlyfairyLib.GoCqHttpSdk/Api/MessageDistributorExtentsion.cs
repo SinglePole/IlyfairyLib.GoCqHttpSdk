@@ -90,9 +90,8 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// <param name="func"></param>
         public static Session UseException(this Session session, Func<MessageEventBase, Exception, Task<bool>> func)
         {
-            session.ExceptionFuncs.Add((
-              func,
-              MessageType.Exception));
+            session.ExceptionFuncs.Add(
+              func);
             return session;
         }
 
@@ -103,9 +102,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// <param name="func">回调<br/>参数True代表WebSocket连接成功否则断开</param>
         public static Session UseWebSocketConnect(this Session session, Func<bool, Task<bool>> func)
         {
-            session.ConnectionFuncs.Add((
-              func,
-              MessageType.Exception));
+            session.ConnectionFuncs.Add(func);
             return session;
         }
 

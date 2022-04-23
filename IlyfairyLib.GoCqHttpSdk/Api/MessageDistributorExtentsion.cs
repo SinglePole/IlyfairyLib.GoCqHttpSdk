@@ -14,11 +14,12 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
-        public static void UseGroupMessage(this Session session, Func<GroupMessage, Task<bool>> func)
+        public static Session UseGroupMessage(this Session session, Func<GroupMessage, Task<bool>> func)
         {
             session.MessageFuncs.Add((
                 new(v => func((v as GroupMessage)!)),
                 MessageType.GroupMessage));
+            return session;
         }
 
         /// <summary>
@@ -26,11 +27,12 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调</param>
-        public static void UsePrivateMessage(this Session session, Func<PrivateMessage, Task<bool>> func)
+        public static Session UsePrivateMessage(this Session session, Func<PrivateMessage, Task<bool>> func)
         {
             session.MessageFuncs.Add((
                 new(v => func((v as PrivateMessage)!)),
                 MessageType.PrivateMessage));
+            return session;
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// <param name="session">会话</param>
         /// <param name="regex">正则表达式</param>
         /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
-        public static void MapGroup(this Session session, string regex, Func<GroupMessage, GroupCollection, Task> func)
+        public static Session MapGroup(this Session session, string regex, Func<GroupMessage, GroupCollection, Task> func)
         {
             session.MessageFuncs.Add((
               new(async v =>
@@ -54,6 +56,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
                   return true;
               }),
               MessageType.GroupMessage));
+            return session;
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// <param name="session">会话</param>
         /// <param name="regex">正则表达式</param>
         /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
-        public static void MapPrivate(this Session session, string regex, Func<PrivateMessage, GroupCollection, Task> func)
+        public static Session MapPrivate(this Session session, string regex, Func<PrivateMessage, GroupCollection, Task> func)
         {
             session.MessageFuncs.Add((
               new(async v =>
@@ -77,6 +80,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
                   return true;
               }),
               MessageType.PrivateMessage));
+            return session;
         }
 
         /// <summary>
@@ -84,11 +88,12 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session"></param>
         /// <param name="func"></param>
-        public static void UseException(this Session session, Func<MessageEventBase, Exception, Task<bool>> func)
+        public static Session UseException(this Session session, Func<MessageEventBase, Exception, Task<bool>> func)
         {
             session.ExceptionFuncs.Add((
               func,
               MessageType.Exception));
+            return session;
         }
 
         /// <summary>
@@ -96,11 +101,12 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session"></param>
         /// <param name="func">回调<br/>参数True代表WebSocket连接成功否则断开</param>
-        public static void UseWebSocketConnect(this Session session, Func<bool, Task<bool>> func)
+        public static Session UseWebSocketConnect(this Session session, Func<bool, Task<bool>> func)
         {
             session.ConnectionFuncs.Add((
               func,
               MessageType.Exception));
+            return session;
         }
 
         /// <summary>
@@ -108,23 +114,25 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
-        public static void UseLifecycle(this Session session, Func<LifecycleMessage, Task<bool>> func)
+        public static Session UseLifecycle(this Session session, Func<LifecycleMessage, Task<bool>> func)
         {
             session.MessageFuncs.Add((
                 new(v => func((v as LifecycleMessage)!)),
                 MessageType.Lifecycle));
+            return session;
         }
-        
+
         /// <summary>
         /// 创建心跳包中间件
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
-        public static void UseHeartbeat(this Session session, Func<HeartbeatMessage, Task<bool>> func)
+        public static Session UseHeartbeat(this Session session, Func<HeartbeatMessage, Task<bool>> func)
         {
             session.MessageFuncs.Add((
                 new(v => func((v as HeartbeatMessage)!)),
                 MessageType.Heartbeat));
+            return session;
         }
     }
 }

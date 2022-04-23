@@ -10,7 +10,6 @@
     <PackageProjectUrl>https://github.com/kawaiifairy/IlyfairyLib.GoCqHttpSdk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kawaiifairy/IlyfairyLib.GoCqHttpSdk</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

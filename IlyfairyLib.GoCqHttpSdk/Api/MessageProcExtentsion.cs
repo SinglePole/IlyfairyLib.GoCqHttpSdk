@@ -93,27 +93,24 @@ internal static class MessageProcExtentsion
 
     internal static async Task Distribution(this Session session, MessageEventBase message)
     {
-        await Task.Run(async () =>
+        foreach (var msgFunc in session.MessageFuncs.Where(v => v.type == message.MessageType))
         {
-            foreach (var msgFunc in session.MessageFuncs.Where(v => v.type == message.MessageType))
+            try
+            {
+                var isContinue = msgFunc.func(message);
+                if (!await isContinue) break;
+            }
+            catch (Exception e)
             {
                 try
                 {
-                    var isContinue = msgFunc.func(message);
-                    if (!await isContinue) break;
-                }
-                catch (Exception e)
-                {
-                    try
+                    foreach (var exFunc in session.ExceptionFuncs)
                     {
-                        foreach (var exFunc in session.ExceptionFuncs)
-                        {
-                            await exFunc(message, e);
-                        }
+                        await exFunc(message, e);
                     }
-                    catch { }
                 }
+                catch { }
             }
-        });
+        }
     }
 }

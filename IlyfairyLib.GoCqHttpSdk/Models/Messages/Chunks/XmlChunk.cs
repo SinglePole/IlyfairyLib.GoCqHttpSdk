@@ -10,6 +10,14 @@ public sealed class XmlChunk : MessageChunk
     public XmlChunk(string xml)
     {
         Xml = xml;
-        Data["xml"] = xml;
+        Data["data"] = xml;
+    }
+
+    public static new XmlChunk? Parse(JToken json)
+    {
+        var data = json["data"];
+        var xmlChunk = new XmlChunk(data.Value<string>("data"));
+        xmlChunk.Data = data as JObject;
+        return xmlChunk;
     }
 }

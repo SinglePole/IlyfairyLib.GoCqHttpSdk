@@ -10,7 +10,7 @@ public sealed class JsonChunk : MessageChunk
     public JsonChunk(string json)
     {
         Json = json;
-        Data["json"] = json;
+        Data["data"] = json;
     }
 
     public static new JsonChunk? Parse(JToken json)

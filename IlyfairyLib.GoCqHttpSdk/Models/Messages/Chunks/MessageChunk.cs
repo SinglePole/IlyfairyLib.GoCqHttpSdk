@@ -78,7 +78,7 @@ public abstract class MessageChunk
             //"reply" => ReplyChunk.Parse(json),
             //"forward" => ForwardChunk.Parse(json),
             //"node" => NodeChunk.Parse(json),
-            //"xml" => XmlChunk.Parse(json),
+            "xml" => XmlChunk.Parse(json),
             "json" => JsonChunk.Parse(json),
             //"tts" => TtsChunk.Parse(json),
             _ => null,

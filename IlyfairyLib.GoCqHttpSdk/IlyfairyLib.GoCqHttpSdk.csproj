@@ -6,7 +6,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Authors>ilyfairy</Authors>
     <Description>gocqhttp的C#sdk</Description>
-    <Copyright>©  ilyfairy</Copyright>
+    <Copyright>© ilyfairy</Copyright>
     <PackageProjectUrl>https://github.com/kawaiifairy/IlyfairyLib.GoCqHttpSdk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/kawaiifairy/IlyfairyLib.GoCqHttpSdk</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

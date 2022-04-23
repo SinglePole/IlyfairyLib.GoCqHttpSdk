@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IlyfairyLib.GoCqHttpSdk", "IlyfairyLib.GoCqHttpSdk\IlyfairyLib.GoCqHttpSdk.csproj", "{DF924772-FD57-41C9-A6B1-B0485590F400}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{3370D33F-D9A8-49D4-B9CC-74A761C753CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{3370D33F-D9A8-49D4-B9CC-74A761C753CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,27 +1,22 @@
-﻿using Newtonsoft.Json.Linq;
+﻿namespace IlyfairyLib.GoCqHttpSdk.Models;
 
-namespace IlyfairyLib.GoCqHttpSdk.Models;
-
-public static partial class MessageApiExtentsion
+public class JsonEx
 {
-    public class JsonEx
+    public JObject Json { get; set; } = new();
+
+    public JsonEx Set(string name, JToken value)
     {
-        public JObject Json { get; set; } = new();
+        Json[name] = value;
+        return this;
+    }
 
-        public JsonEx Set(string name, JToken value)
-        {
-            Json[name] = value;
-            return this;
-        }
+    public static JsonEx Create()
+    {
+        return new JsonEx();
+    }
 
-        public static JsonEx Create()
-        {
-            return new JsonEx();
-        }
-
-        public static implicit operator JObject(JsonEx json)
-        {
-            return json.Json;
-        }
+    public static implicit operator JObject(JsonEx json)
+    {
+        return json.Json;
     }
 }

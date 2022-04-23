@@ -1,17 +1,13 @@
 ﻿using Flurl.Http;
 using IlyfairyLib.GoCqHttpSdk.Models.Api;
 using IlyfairyLib.GoCqHttpSdk.Models.Chunks;
-using IlyfairyLib.GoCqHttpSdk.Models.Messages;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using static IlyfairyLib.GoCqHttpSdk.Models.MessageApiExtentsion;
 
 namespace IlyfairyLib.GoCqHttpSdk.Api;
 
-public static partial class MessageApiExtentsion
+public static class MessageApiExtentsion
 {
     private static MediaTypeHeaderValue JsonContentType { get; } = new MediaTypeHeaderValue("application/json");
     private static async Task<string> SendApiAsync(this Session server, string text)

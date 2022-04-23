@@ -54,5 +54,6 @@ public class Session
         await WsClient.Reconnect();
     }
 
-    internal List<(Func<MessageEventBase, Task<bool>> func, MessageType type, Func<bool> isCall)> MessageFuncs { get; } = new();
+    internal List<(Func<MessageEventBase, Task<bool>> func, MessageType type)> MessageFuncs { get; } = new();
+    internal List<(Func<MessageEventBase, Exception, Task<bool>> func, MessageType type)> ExceptionFuncs { get; } = new();
 }

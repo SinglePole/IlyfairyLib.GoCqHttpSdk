@@ -95,11 +95,24 @@ internal static class MessageProcExtentsion
     {
         await Task.Run(async () =>
         {
-            foreach (var (func, type, isCall) in session.MessageFuncs.Where(v => v.type == message.MessageType))
+            foreach (var msgFunc in session.MessageFuncs.Where(v => v.type == message.MessageType))
             {
-                if (!isCall()) continue;
-                var isContinue = func(message);
-                if (!await isContinue) break;
+                try
+                {
+                    var isContinue = msgFunc.func(message);
+                    if (!await isContinue) break;
+                }
+                catch (Exception e)
+                {
+                    try
+                    {
+                        foreach (var item in session.ExceptionFuncs.Where(v => v.type == MessageType.Exception))
+                        {
+                            await item.func(message, e);
+                        }
+                    }
+                    catch { }
+                }
             }
         });
     }

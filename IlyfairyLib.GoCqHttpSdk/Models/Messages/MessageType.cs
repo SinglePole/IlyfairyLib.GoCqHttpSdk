@@ -1,5 +1,8 @@
 ﻿namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
 
+/// <summary>
+/// 消息类型
+/// </summary>
 public enum MessageType
 {
     Lifecycle, //生命周期
@@ -17,4 +20,5 @@ public enum MessageType
     NoticePoke, //群内戳一戳
     NoticeLuckyKing, //群红包运气王
     NoticeHonor, //群成员荣誉变更
+    Exception, //异常
 }

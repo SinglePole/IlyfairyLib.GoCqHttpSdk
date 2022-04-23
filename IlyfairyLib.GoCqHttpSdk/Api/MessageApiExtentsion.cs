@@ -197,9 +197,9 @@ public static class MessageApiExtentsion
     /// <param name="qq"></param>
     /// <param name="count"></param>
     /// <returns></returns>
-    public static async Task SendLike(this Session client, long qq,int count)
+    public static async Task SendLike(this Session client, long qq, int count)
     {
-        var json = new JObject();
+        JObject json = new();
         json["user_id"] = qq;
         json["times"] = count;
         await SendApiMessageAsync(client, ApiActionType.GetMessage, json);

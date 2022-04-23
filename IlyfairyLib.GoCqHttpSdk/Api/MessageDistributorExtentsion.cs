@@ -18,8 +18,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         {
             session.MessageFuncs.Add((
                 new(v => func((v as GroupMessage)!)),
-                MessageType.GroupMessage,
-                () => true));
+                MessageType.GroupMessage));
         }
 
         /// <summary>
@@ -31,8 +30,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         {
             session.MessageFuncs.Add((
                 new(v => func((v as PrivateMessage)!)),
-                MessageType.PrivateMessage,
-                () => true));
+                MessageType.PrivateMessage));
         }
 
         /// <summary>
@@ -55,8 +53,42 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
                   }
                   return true;
               }),
-              MessageType.GroupMessage,
-              () => true));
+              MessageType.GroupMessage));
+        }
+
+                /// <summary>
+        /// 将正则表达式映射到群消息
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="regex">正则表达式</param>
+        /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
+        public static void MapPrivate(this Session session, string regex, Func<PrivateMessage, GroupCollection, Task> func)
+        {
+            session.MessageFuncs.Add((
+              new(async v =>
+              {
+                  var msg = (v as PrivateMessage);
+                  Match match = Regex.Match(msg.RawMessage, regex);
+                  if (match.Success)
+                  {
+                      await func(msg, match.Groups);
+                      return false;
+                  }
+                  return true;
+              }),
+              MessageType.PrivateMessage));
+        }
+
+        /// <summary>
+        /// 创建异常消息中间件
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="func"></param>
+        public static void UseException(this Session session, Func<MessageEventBase, Exception, Task<bool>> func)
+        {
+            session.ExceptionFuncs.Add((
+              func,
+              MessageType.Exception));
         }
     }
 }

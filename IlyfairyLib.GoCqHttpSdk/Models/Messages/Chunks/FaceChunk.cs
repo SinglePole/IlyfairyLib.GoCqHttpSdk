@@ -19,4 +19,12 @@ public sealed class FaceChunk : MessageChunk
     {
         ID = id;
     }
+    
+    public static new FaceChunk? Parse(JToken json)
+    {
+        var data = json["data"];
+        var face = new FaceChunk(data.Value<int>("id"));
+        face.Data = data as JObject;
+        return face;
+    }
 }

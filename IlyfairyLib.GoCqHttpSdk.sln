@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IlyfairyLib.GoCqHttpSdk", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{3370D33F-D9A8-49D4-B9CC-74A761C753CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{D6B427B9-6452-4672-ACFA-DCDA31190CB1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{3370D33F-D9A8-49D4-B9CC-74A761C753CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3370D33F-D9A8-49D4-B9CC-74A761C753CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3370D33F-D9A8-49D4-B9CC-74A761C753CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6B427B9-6452-4672-ACFA-DCDA31190CB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6B427B9-6452-4672-ACFA-DCDA31190CB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6B427B9-6452-4672-ACFA-DCDA31190CB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6B427B9-6452-4672-ACFA-DCDA31190CB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

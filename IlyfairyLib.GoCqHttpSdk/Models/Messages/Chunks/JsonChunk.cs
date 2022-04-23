@@ -12,4 +12,12 @@ public sealed class JsonChunk : MessageChunk
         Json = json;
         Data["json"] = json;
     }
+
+    public static new JsonChunk? Parse(JToken json)
+    {
+        var data = json["data"];
+        var jsonChunk = new JsonChunk(data.Value<string>("data"));
+        jsonChunk.Data = data as JObject;
+        return jsonChunk;
+    }
 }

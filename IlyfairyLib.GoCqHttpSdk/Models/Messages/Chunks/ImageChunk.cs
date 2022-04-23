@@ -33,6 +33,5 @@ public sealed class ImageChunk : MessageChunk
         var image = new ImageChunk(data.Value<string>("file"), data.Value<string>("url"), data.Value<bool>("flash"));
         image.Data = data as JObject;
         return image;
-
     }
 }

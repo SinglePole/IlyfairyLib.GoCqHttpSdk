@@ -41,7 +41,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// <param name="session">会话</param>
         /// <param name="regex">正则表达式</param>
         /// <param name="func">回调<br/>返回值代表是否继续向下传递</param>
-        public static void MapGroup(this Session session, [StringSyntax("Regex")] string regex, Func<GroupMessage, GroupCollection, Task> func)
+        public static void MapGroup(this Session session, string regex, Func<GroupMessage, GroupCollection, Task> func)
         {
             session.MessageFuncs.Add((
               new(async v =>

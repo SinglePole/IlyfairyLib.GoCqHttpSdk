@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace IlyfairyLib.GoCqHttpSdk.Api;
 
+/// <summary>
+/// 消息Api扩展
+/// </summary>
 public static class MessageApiExtentsion
 {
     private static MediaTypeHeaderValue JsonContentType { get; } = new MediaTypeHeaderValue("application/json");

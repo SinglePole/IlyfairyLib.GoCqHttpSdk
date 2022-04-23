@@ -18,9 +18,7 @@ internal static class MessageProcExtentsion
             try
             {
                 JObject json = JObject.Parse(message.Text);
-#if DEBUG
-                Console.WriteLine(json);
-#endif
+
                 msg = json.Value<string>("post_type") switch
                 {
                     "meta_event" => json.Value<string>("meta_event_type") switch

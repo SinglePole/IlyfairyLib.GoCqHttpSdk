@@ -28,10 +28,6 @@ public static class MessageApiExtentsion
     {
         var result = await SendApiAsync(server, action, @params);
 
-#if DEBUG
-        //Console.WriteLine($"api result: \n{result}");
-#endif
-
         try
         {
             var json = JObject.Parse(result);

@@ -12,6 +12,9 @@ using Websocket.Client;
 
 
 namespace IlyfairyLib.GoCqHttpSdk;
+/// <summary>
+/// 一个GoCqHttp会话
+/// </summary>
 public class Session
 {
     public Uri WsUrl { get; set; }
@@ -30,14 +33,13 @@ public class Session
 
     private void WebSocketSubscribeInit()
     {
-        //断开
-        WsClient.DisconnectionHappened.Subscribe(async disInfo =>
+        async Task T(bool isConnected)
         {
             foreach (var item in ConnectionFuncs)
             {
                 try
                 {
-                    await item(false);
+                    await item(isConnected);
                 }
                 catch (Exception e)
                 {
@@ -51,30 +53,22 @@ public class Session
                     catch { }
                 }
             }
-        });
+        }
         //连接/重新连接
         WsClient.ReconnectionHappened.Subscribe(async reInfo =>
         {
-            foreach (var item in ConnectionFuncs)
-            {
-                try
-                {
-                    await item(true);
-                }
-                catch (Exception e)
-                {
-                    try
-                    {
-                        foreach (var exFunc in this.ExceptionFuncs)
-                        {
-                            await exFunc(null, e);
-                        }
-                    }
-                    catch { }
-                }
-            }
+            await T(true);
+        });
+        //断开
+        WsClient.DisconnectionHappened.Subscribe(async disInfo =>
+        {
+            await T(false);
         });
     }
+    /// <summary>
+    /// 构建连接
+    /// </summary>
+    /// <exception cref="InvalidOperationException"></exception>
     public async void Build()
     {
         lock (WsClient)
@@ -85,6 +79,9 @@ public class Session
         this.Process();
         await WsClient.Start();
     }
+    /// <summary>
+    /// 重新连接
+    /// </summary>
     public async void ReConnect()
     {
         await WsClient.Reconnect();

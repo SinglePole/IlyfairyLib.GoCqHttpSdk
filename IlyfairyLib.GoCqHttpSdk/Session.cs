@@ -1,5 +1,4 @@
-﻿
-global using System;
+﻿global using System;
 global using System.Linq;
 global using Newtonsoft.Json.Linq;
 global using IlyfairyLib.GoCqHttpSdk.Models;
@@ -9,7 +8,6 @@ global using IlyfairyLib.GoCqHttpSdk.Models.Messages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Websocket.Client;
-
 
 namespace IlyfairyLib.GoCqHttpSdk;
 /// <summary>
@@ -22,6 +20,11 @@ public class Session
     internal WebsocketClient WsClient { get; private init; }
     private bool isStart;
 
+    /// <summary>
+    /// 初始化一个GoCqHttp会话
+    /// </summary>
+    /// <param name="ws">WebSocket地址<br/>ws://</param>
+    /// <param name="http">Http地址<br/>http://</param>
     public Session(string ws, string http)
     {
         WsUrl = new(ws);

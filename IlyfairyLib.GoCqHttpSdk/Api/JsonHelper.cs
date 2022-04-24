@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IlyfairyLib.GoCqHttpSdk;
 
-public static class JsonHelper
+internal static class JsonHelper
 {
     public static JArray ToJArray(this MessageChunk[] chunks)
     {

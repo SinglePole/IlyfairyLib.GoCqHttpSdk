@@ -20,9 +20,9 @@ namespace IlyfairyLib.GoCqHttpSdk.Utils
                 .Replace("&#93;", "]");
         }
         
-        public static string ToRawText(this string rawText)
+        public static string ToRawText(this string text)
         {
-            return rawText
+            return text
                 .Replace("&", "&amp;")
                 .Replace("[", "&#91;")
                 .Replace("]", "&#93;");

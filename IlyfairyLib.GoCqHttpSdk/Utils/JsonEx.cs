@@ -1,4 +1,4 @@
-﻿namespace IlyfairyLib.GoCqHttpSdk.Api;
+﻿namespace IlyfairyLib.GoCqHttpSdk.Utils;
 
 internal class JsonEx
 {
@@ -19,4 +19,4 @@ internal class JsonEx
     {
         return json.Json;
     }
-} 
+}

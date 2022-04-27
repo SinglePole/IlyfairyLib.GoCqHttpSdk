@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using IlyfairyLib.GoCqHttpSdk.Models.Api;
 using IlyfairyLib.GoCqHttpSdk.Models.Chunks;
+using IlyfairyLib.GoCqHttpSdk.Utils;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;

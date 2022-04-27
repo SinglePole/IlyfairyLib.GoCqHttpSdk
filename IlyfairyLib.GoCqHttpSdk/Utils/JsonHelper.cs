@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IlyfairyLib.GoCqHttpSdk;
+namespace IlyfairyLib.GoCqHttpSdk.Utils;
 
 internal static class JsonHelper
 {

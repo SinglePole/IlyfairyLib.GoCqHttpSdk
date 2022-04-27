@@ -1,6 +1,6 @@
-﻿namespace IlyfairyLib.GoCqHttpSdk.Models;
+﻿namespace IlyfairyLib.GoCqHttpSdk.Api;
 
-public class JsonEx
+internal class JsonEx
 {
     public JObject Json { get; set; } = new();
 
@@ -19,4 +19,4 @@ public class JsonEx
     {
         return json.Json;
     }
-}
+} 

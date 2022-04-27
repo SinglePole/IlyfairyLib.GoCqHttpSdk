@@ -9,9 +9,9 @@ namespace IlyfairyLib.GoCqHttpSdk.Api;
 
 internal static class MessageProcExtentsion
 {
-    internal static void Process(this Session client)
+    internal static void Process(this Session session)
     {
-        client.WsClient.MessageReceived.Subscribe(async message =>
+        session.WsClient.MessageReceived.Subscribe(async message =>
         {
             MessageEventBase? msg = null;
 
@@ -71,22 +71,12 @@ internal static class MessageProcExtentsion
                     _ => null
                 };
 
-                if (msg == null)
-                {
-                    return;
-                }
-                else
-                {
-
-                }
-
-
             }
             catch { }
 
             if (msg != null)
             {
-                await client.Distribution(msg);
+                await session.Distribution(msg);
             }
         });
     }

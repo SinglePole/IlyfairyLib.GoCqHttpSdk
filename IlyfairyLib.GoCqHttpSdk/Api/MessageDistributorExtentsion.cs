@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using IlyfairyLib.GoCqHttpSdk.Utils;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
               new(async v =>
               {
                   var msg = (v as GroupMessage);
-                  Match match = Regex.Match(msg.RawMessage, regex);
+                  Match match = Regex.Match(msg.RawMessage.ToText(), regex);
                   if (match.Success)
                   {
                       await func(msg, match.Groups);
@@ -71,7 +72,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
               new(async v =>
               {
                   var msg = (v as PrivateMessage);
-                  Match match = Regex.Match(msg.RawMessage, regex);
+                  Match match = Regex.Match(msg.RawMessage.ToText(), regex);
                   if (match.Success)
                   {
                       await func(msg, match.Groups);

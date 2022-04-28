@@ -1,8 +1,20 @@
 # IlyfairyLib.GoCqHttpSdk
 
-## 示例
-``` C#
+## 使用
 
+前往[go-cqhttp Release](https://github.com/Mrs4s/go-cqhttp/releases)下载go-cqhttp
+
+将config.yml里的message.post-format改成array
+
+开启http和ws
+
+下载NuGet包: IlyfairyLib.GoCqHttpSdk
+
+
+
+## 示例
+
+``` C#
 using IlyfairyLib.GoCqHttpSdk;
 using IlyfairyLib.GoCqHttpSdk.Api;
 
@@ -16,7 +28,7 @@ session.UseGroupMessage(async v =>
 });
 
 //复读机示例
-session.MapGroup(@"^echo\s*(?<content>.*)$", async (v, group) =>
+session.MapGroupMessage(@"^echo\s*(?<content>.*)$", async (v, group) =>
 {
     await session.SendRawGroupMessageAsync(v.GroupId, group["content"].Value);
 });
@@ -24,6 +36,5 @@ session.MapGroup(@"^echo\s*(?<content>.*)$", async (v, group) =>
 session.Build();
 
 new AutoResetEvent(false).WaitOne();
-
 
 ```

@@ -18,6 +18,7 @@
 using IlyfairyLib.GoCqHttpSdk;
 using IlyfairyLib.GoCqHttpSdk.Api;
 
+//创建一个连接cqhttp的会话  使用ws来接收消息,http来发送消息
 Session session = new("ws://127.0.0.1:6700", "http://127.0.0.1:5700");
 
 //接收所有群消息

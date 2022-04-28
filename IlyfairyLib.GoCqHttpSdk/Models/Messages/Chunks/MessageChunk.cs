@@ -61,6 +61,7 @@ public abstract class MessageChunk
     {
         if (json == null) return null;
         var type = json.Value<string>("type");
+        if (json["data"] == null) return null;
         return type switch
         {
             "text" => TextChunk.Parse(json),
@@ -80,7 +81,7 @@ public abstract class MessageChunk
             //"node" => NodeChunk.Parse(json),
             "xml" => XmlChunk.Parse(json),
             "json" => JsonChunk.Parse(json),
-            //"tts" => TtsChunk.Parse(json),
+            "record" => RecordChunk.Parse(json),
             _ => null,
         };
     }

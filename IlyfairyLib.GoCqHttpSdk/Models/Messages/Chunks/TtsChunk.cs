@@ -14,5 +14,4 @@ public sealed class TtsChunk : MessageChunk
         Text = text;
         Data["text"] = text;
     }
-
 }

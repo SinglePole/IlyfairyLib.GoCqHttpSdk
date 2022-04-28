@@ -17,7 +17,6 @@ public sealed class JsonChunk : MessageChunk
     {
         var data = json["data"];
         var jsonChunk = new JsonChunk(data.Value<string>("data"));
-        jsonChunk.Data = data as JObject;
         return jsonChunk;
     }
 }

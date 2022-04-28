@@ -17,7 +17,6 @@ public sealed class XmlChunk : MessageChunk
     {
         var data = json["data"];
         var xmlChunk = new XmlChunk(data.Value<string>("data"));
-        xmlChunk.Data = data as JObject;
         return xmlChunk;
     }
 }

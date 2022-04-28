@@ -24,4 +24,15 @@ public sealed class RecordChunk : MessageChunk
         Url = url;
         IsMagic = isMagic;
     }
+
+    public static new RecordChunk? Parse(JToken json)
+    {
+        var data = json["data"];
+        var file = data.Value<string>("file");
+        var url = data.Value<string>("url");
+        var magic = data.Value<string>("magic") == "0" ? false : true;
+        var jsonChunk = new RecordChunk(file, url, magic);
+        jsonChunk.Data = data as JObject;
+        return jsonChunk;
+    }
 }

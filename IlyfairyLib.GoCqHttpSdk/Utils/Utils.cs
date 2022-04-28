@@ -12,6 +12,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Utils
         // [ &#91;
         // ] &#93;
         
+        
         public static string ToText(this string rawText)
         {
             return rawText

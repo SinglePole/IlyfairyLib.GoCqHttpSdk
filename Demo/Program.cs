@@ -11,7 +11,7 @@ session.UseGroupMessage(async v =>
 });
 
 //复读机示例
-session.MapGroup(@"^echo\s*(?<content>.*)$", async (v, group) =>
+session.MapGroupMessage(@"^echo\s*(?<content>.*)$", async (v, group) =>
 {
     await session.SendRawGroupMessageAsync(v.GroupId, group["content"].Value);
 });

@@ -23,14 +23,14 @@ internal static class MessageProcExtentsion
                 {
                     "meta_event" => json.Value<string>("meta_event_type") switch
                     {
-                        "lifecycle" => new LifecycleMessage(json),
-                        "heartbeat" => new HeartbeatMessage(json),
+                        "lifecycle" => new LifecycleMessage(session, json),
+                        "heartbeat" => new HeartbeatMessage(session, json),
                         _ => null,
                     },
                     "message" => json.Value<string>("message_type") switch
                     {
-                        "private" => new PrivateMessage(json),
-                        "group" => new GroupMessage(json),
+                        "private" => new PrivateMessage(session, json),
+                        "group" => new GroupMessage(session, json),
                         _ => null,
                     },
                     "notice" => json.Value<string>("notice_type") switch
@@ -83,7 +83,7 @@ internal static class MessageProcExtentsion
 
     internal static async Task Distribution(this Session session, MessageEventBase message)
     {
-        foreach (var msgFunc in session.MessageFuncs.Where(v => v.type == message.MessageType))
+        foreach (var msgFunc in session.MessageFuncs.Where(v => v.type == message.MessageSubType))
         {
             try
             {

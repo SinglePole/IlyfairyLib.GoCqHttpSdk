@@ -20,6 +20,8 @@ public class Session
     internal WebsocketClient WsClient { get; private init; }
     private bool isStart;
 
+    public long RobotQQ { get; internal set; }
+
     /// <summary>
     /// 初始化一个GoCqHttp会话
     /// </summary>

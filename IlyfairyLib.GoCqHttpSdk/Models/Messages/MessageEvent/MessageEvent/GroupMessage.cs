@@ -8,11 +8,11 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
 /// </summary>
 public sealed class GroupMessage : MessageBase<GroupSender>
 {
-    public override MessageType MessageType => MessageType.GroupMessage;
+    public override MessageType MessageSubType => MessageType.GroupMessage;
     public long GroupId { get; init; }
     public Anonymous Anonymous { get; init; }
 
-    internal GroupMessage(JToken json) : base(json)
+    internal GroupMessage(Session session, JToken json) : base(session,json)
     {
         Sender = GroupSender.Get(json["sender"]);
         GroupId = json.Value<long>("group_id");

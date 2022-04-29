@@ -9,8 +9,8 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
 /// </summary>
 public sealed class PrivateMessage : MessageBase<Sender>
 {
-    public override MessageType MessageType => MessageType.PrivateMessage;
-    internal PrivateMessage(JToken json) : base(json)
+    public override MessageType MessageSubType => MessageType.PrivateMessage;
+    internal PrivateMessage(Session session, JToken json) : base(session,json)
     {
         Sender = Sender.Get(json["sender"]);
     }

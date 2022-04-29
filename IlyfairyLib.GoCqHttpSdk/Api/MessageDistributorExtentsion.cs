@@ -48,7 +48,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
               new(async v =>
               {
                   var msg = (v as GroupMessage);
-                  Match match = Regex.Match(msg.RawMessage.ToText(), regex);
+                  Match match = Regex.Match(msg.Message.RawMessage.ToText(), regex);
                   if (match.Success)
                   {
                       await func(msg, match.Groups);
@@ -72,7 +72,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
               new(async v =>
               {
                   var msg = (v as PrivateMessage);
-                  Match match = Regex.Match(msg.RawMessage.ToText(), regex);
+                  Match match = Regex.Match(msg.Message.RawMessage.ToText(), regex);
                   if (match.Success)
                   {
                       await func(msg, match.Groups);

@@ -8,10 +8,10 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
 /// </summary>
 public class LifecycleMessage : MessageEventBase
 {
-    public override MessageType MessageType => MessageType.Lifecycle;
-    internal LifecycleMessage(JToken json) : base(json)
+    public override MessageType MessageSubType => MessageType.Lifecycle;
+    internal LifecycleMessage(Session session, JToken json) : base(session, json)
     {
-
+        session.RobotQQ = json.Value<long>("self_id");
     }
 
 }

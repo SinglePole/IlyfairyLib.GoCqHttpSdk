@@ -13,8 +13,8 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
 /// </summary>
 public class HeartbeatMessage : MessageEventBase
 {
-    public override MessageType MessageType => MessageType.Heartbeat;
-    internal HeartbeatMessage(JToken json) : base(json)
+    public override MessageType MessageSubType => MessageType.Heartbeat;
+    internal HeartbeatMessage(Session session, JToken json) : base(session, json)
     {
 
     }

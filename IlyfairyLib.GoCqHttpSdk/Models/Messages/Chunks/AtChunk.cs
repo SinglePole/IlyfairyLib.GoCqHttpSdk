@@ -35,7 +35,7 @@ public sealed class AtChunk : MessageChunk
 
     public static new AtChunk? Parse(JToken json)
     {
-        AtChunk? result;
+        AtChunk? result = null;
         if (json["data"]?.Value<string>("qq") is string qq)
         {
             if (qq == "all")
@@ -48,6 +48,6 @@ public sealed class AtChunk : MessageChunk
             }
             result.Data = json as JObject;
         }
-        return null;
+        return result;
     }
 }

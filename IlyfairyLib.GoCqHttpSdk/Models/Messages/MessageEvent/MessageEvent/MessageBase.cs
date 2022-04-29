@@ -30,7 +30,7 @@ public abstract class MessageBase<TSender> : MessageEventBase where TSender : Se
     /// <summary>
     /// 仅文本消息
     /// </summary>
-    public string TextOnly { get; set; }
+    public string TextOnly { get; init; }
     /// <summary>
     /// 消息ID
     /// </summary>

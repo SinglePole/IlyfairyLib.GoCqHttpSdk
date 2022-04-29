@@ -31,6 +31,8 @@ public sealed class AtChunk : MessageChunk
         }
     }
 
+    public bool IsAtAll { get => qq is -1; }
+
     public static AtChunk All => new(true);
 
     public static new AtChunk? Parse(JToken json)

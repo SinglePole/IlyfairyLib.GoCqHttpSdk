@@ -48,6 +48,15 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
         } 
     }
 
+    /// <summary>
+    /// 获取消息中所有艾特的qq
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<AtChunk> GetAllAt()
+    {
+        return _builder.Where(v => v.Type == MessageChunkType.at).Cast<AtChunk>();
+    }
+
     internal ReadOnlyMessage(Session session, JToken json)
     {
         var builder = MessageBuilder.Parse(json["message"] as JArray);
@@ -71,4 +80,3 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
-

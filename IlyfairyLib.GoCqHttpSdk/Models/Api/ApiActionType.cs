@@ -18,5 +18,5 @@ public struct ApiActionType
     public static ApiActionType GetMessage => new ApiActionType("get_msg");
     public static ApiActionType GetGroupInfo => new ApiActionType("get_group_info");
     public static ApiActionType AgreeFriendRequest => new ApiActionType("set_friend_add_request ");
-    public static ApiActionType AgreeGroupRequest => new ApiActionType("set_group_add_request  ");
+    public static ApiActionType AgreeGroupRequest => new ApiActionType("set_group_add_request");
 }

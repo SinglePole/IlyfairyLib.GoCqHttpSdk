@@ -6,7 +6,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 /// <summary>
 /// 群聊消息
 /// </summary>
-public sealed class GroupMessage : MessageBase<GroupSender>
+public sealed class GroupMessage : MessageBase<GroupSender>, IGroupInfo
 {
     public override MessageType MessageSubType => MessageType.GroupMessage;
     /// <summary>
@@ -31,6 +31,8 @@ public sealed class GroupMessage : MessageBase<GroupSender>
         }
     }
 
+    GroupInfo IGroupInfo.GroupInfo { get => GroupInfo; init => groupInfo = value; }
+
     /// <summary>
     /// 刷新群信息
     /// </summary>
@@ -42,7 +44,7 @@ public sealed class GroupMessage : MessageBase<GroupSender>
     }
 
 
-    internal GroupMessage(Session session, JToken json) : base(session,json)
+    internal GroupMessage(Session session, JToken json) : base(session, json)
     {
         Sender = GroupSender.Get(json["sender"]);
         GroupId = json.Value<long>("group_id");

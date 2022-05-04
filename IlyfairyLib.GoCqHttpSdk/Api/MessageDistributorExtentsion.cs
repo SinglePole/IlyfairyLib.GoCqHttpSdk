@@ -1,4 +1,5 @@
-﻿using IlyfairyLib.GoCqHttpSdk.Utils;
+﻿using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
+using IlyfairyLib.GoCqHttpSdk.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -33,6 +34,19 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
             session.MessageFuncs.Add((
                 new(v => func((v as PrivateMessage)!)),
                 MessageType.PrivateMessage));
+            return session;
+        }
+
+        /// <summary>
+        /// 创建加群请求中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        public static Session UseGroupRequestMessage(this Session session, Func<GroupReuqestMessage, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupReuqestMessage)!)),
+                MessageType.RequestGroup));
             return session;
         }
 

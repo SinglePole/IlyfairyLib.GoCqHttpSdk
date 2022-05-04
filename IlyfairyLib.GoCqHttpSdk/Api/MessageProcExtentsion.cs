@@ -1,8 +1,4 @@
-﻿using IlyfairyLib.GoCqHttpSdk.Models.Messages;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 using System.Threading.Tasks;
 
 namespace IlyfairyLib.GoCqHttpSdk.Api;
@@ -62,8 +58,8 @@ internal static class MessageProcExtentsion
                         "friend" => null,
                         "group" => json.Value<string>("request_type") switch
                         {
-                            "add" => null,
-                            "invite" => null,
+                            "add" => new GroupReuqestMessage(session, json),
+                            "invite" => new GroupReuqestMessage(session, json),
                             _ => null,
                         },
                         _ => null,

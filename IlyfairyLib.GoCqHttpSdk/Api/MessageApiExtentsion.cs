@@ -203,7 +203,6 @@ public static class MessageApiExtentsion
     /// <param name="flag">flag</param>
     /// <param name="approve">是否同意加好友请求</param>
     /// <param name="remark">备注</param>
-    /// <returns>请求是否成功</returns>
     public static void AgreeFriendRequest(this Session session, string flag, bool approve = true, string? remark = null)
     {
         var json = JsonEx.Create()
@@ -212,6 +211,30 @@ public static class MessageApiExtentsion
             .Set("remark", remark);
 
         _ = SendApiMessageAsync(session, ApiActionType.AgreeFriendRequest, json);
+    }
+
+    /// <summary>
+    /// 允许加群请求
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="flag">flag</param>
+    /// <param name="type">请求类型 需要一致</param>
+    /// <param name="approve">是否同意加加群请求</param>
+    /// <param name="reason">拒绝理由</param>
+    public static void AgreeGroupRequest(this Session session, string flag, GroupRequestType type, bool approve = true, string? reason = null)
+    {
+        var json = JsonEx.Create()
+            .Set("flag", flag)
+            .Set("type", type switch
+            {
+                GroupRequestType.Add => "add",
+                GroupRequestType.Invite => "invite",
+                _ => "",
+            })
+            .Set("approve", approve)
+            .Set("reason", reason);
+
+        _ = SendApiMessageAsync(session, ApiActionType.AgreeGroupRequest, json);
     }
 
     

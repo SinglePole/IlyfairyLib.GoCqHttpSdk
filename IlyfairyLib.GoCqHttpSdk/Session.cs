@@ -1,13 +1,13 @@
 ﻿global using System;
 global using System.Linq;
 global using Newtonsoft.Json.Linq;
-global using IlyfairyLib.GoCqHttpSdk.Models;
 global using IlyfairyLib.GoCqHttpSdk.Api;
 global using IlyfairyLib.GoCqHttpSdk.Models.Messages;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Websocket.Client;
+using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 
 namespace IlyfairyLib.GoCqHttpSdk;
 /// <summary>

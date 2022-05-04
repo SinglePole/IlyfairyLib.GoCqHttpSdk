@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent
 {
     /// <summary>
-    /// 加群请求事件
+    /// 加群请求/被邀请加群 事件
     /// </summary>
     public class GroupReuqestMessage : MessageEventBase, IGroupInfo
     {
@@ -48,7 +48,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent
         }
 
         /// <summary>
-        /// 同意加群请求
+        /// 同意 加群请求/被邀请入群
         /// </summary>
         public void Agree()
         {
@@ -56,7 +56,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent
         }
 
         /// <summary>
-        /// 拒绝加群请求
+        /// 拒绝 加群请求/被邀请入群
         /// </summary>
         /// <param name="reason">拒绝理由</param>
         public void Refuse(string reason = null)

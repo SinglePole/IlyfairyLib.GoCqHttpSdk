@@ -38,7 +38,7 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         }
 
         /// <summary>
-        /// 创建加群请求中间件
+        /// 创建 加群请求/被邀请入群 中间件
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调</param>

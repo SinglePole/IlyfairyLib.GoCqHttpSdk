@@ -16,5 +16,5 @@ public struct ApiActionType
     public static ApiActionType SendMessage => new ApiActionType("send_msg");
     public static ApiActionType DeleteMessage => new ApiActionType("delete_msg");
     public static ApiActionType GetMessage => new ApiActionType("get_msg");
-    //public static ApiActionType SendLike => new ApiActionType("send_like");
+    public static ApiActionType GetGroupInfo => new ApiActionType("get_group_info");
 }

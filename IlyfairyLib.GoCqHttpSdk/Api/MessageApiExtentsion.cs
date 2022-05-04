@@ -1,6 +1,7 @@
 ﻿using Flurl.Http;
 using IlyfairyLib.GoCqHttpSdk.Models.Api;
 using IlyfairyLib.GoCqHttpSdk.Models.Chunks;
+using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using IlyfairyLib.GoCqHttpSdk.Utils;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -151,6 +152,43 @@ public static class MessageApiExtentsion
         if (result.Success)
         {
             return result.Data?.Value<int>("message_id");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 发送消息 <br/>会根据参数自动判断发送到私聊还是群组
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群ID</param>
+    /// <returns>成功返回群信息,否则为null</returns>
+    public static async Task<GroupInfo?> GetGroupInfoAsync(this Session session, long groupId,bool useCache = true)
+    {
+
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("no_cache", !useCache);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupInfo, json);
+        if (result.Success)
+        {
+            var info = new GroupInfo()
+            {
+                Id = result.Data?.Value<long>("group_id") ?? 0,
+                Name = result.Data?.Value<string>("group_name") ?? "",
+                Level = result.Data?.Value<int>("group_level") ?? 0,
+                MemberCount = result.Data?.Value<int>("member_count") ?? 0,
+                MaxMemberCount = result.Data?.Value<int>("max_member_count") ?? 0,
+            };
+            
+            info.Memorandum = result.Data?.Value<string>("group_memo") ?? "";
+            if (string.IsNullOrEmpty(info.Memorandum)) info.Memorandum = info.Name;
+            info.CreateTime = result.Data?.Value<int>("group_create_time") ?? 0;
+
+            return info;
         }
         else
         {

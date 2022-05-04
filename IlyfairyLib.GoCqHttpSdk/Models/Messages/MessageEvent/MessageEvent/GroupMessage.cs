@@ -9,8 +9,41 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
 public sealed class GroupMessage : MessageBase<GroupSender>
 {
     public override MessageType MessageSubType => MessageType.GroupMessage;
+    /// <summary>
+    /// 群号
+    /// </summary>
     public long GroupId { get; init; }
+    /// <summary>
+    /// 匿名消息
+    /// </summary>
     public Anonymous Anonymous { get; init; }
+
+    private GroupInfo? groupInfo;
+    /// <summary>
+    /// 群信息
+    /// </summary>
+    public GroupInfo? GroupInfo
+    {
+        get
+        {
+            if (groupInfo == null)
+            {
+                session.GetGroupInfoAsync(GroupId, true).GetAwaiter().GetResult();
+            }
+            return groupInfo;
+        }
+    }
+
+    /// <summary>
+    /// 刷新群信息
+    /// </summary>
+    /// <returns></returns>
+    public GroupInfo? RefreshGroupInfo()
+    {
+        groupInfo = session.GetGroupInfoAsync(GroupId, false).GetAwaiter().GetResult();
+        return groupInfo;
+    }
+
 
     internal GroupMessage(Session session, JToken json) : base(session,json)
     {

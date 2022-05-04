@@ -14,12 +14,10 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent
     public class GroupReuqestMessage : MessageEventBase, IGroupInfo
     {
         public override MessageType MessageSubType => MessageType.RequestGroup;
-
         /// <summary>
         /// 请求类型
         /// </summary>
         public GroupRequestType RequestType { get; init; }
-
         
         /// <summary>
         /// 群号

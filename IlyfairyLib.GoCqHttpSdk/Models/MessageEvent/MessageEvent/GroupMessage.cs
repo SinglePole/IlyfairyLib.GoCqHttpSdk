@@ -1,7 +1,7 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using Newtonsoft.Json.Linq;
 
-namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
+namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 
 /// <summary>
 /// 群聊消息
@@ -26,10 +26,7 @@ public sealed class GroupMessage : MessageBase<GroupSender>
     {
         get
         {
-            if (groupInfo == null)
-            {
-                groupInfo = session.GetGroupInfoAsync(GroupId, true).GetAwaiter().GetResult();
-            }
+            if (groupInfo == null) groupInfo = session.GetGroupInfoAsync(GroupId, true).GetAwaiter().GetResult();
             return groupInfo;
         }
     }

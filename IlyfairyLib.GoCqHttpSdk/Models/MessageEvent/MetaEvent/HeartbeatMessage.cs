@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
+namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 
 /// <summary>
 /// 元消息 - 心跳包

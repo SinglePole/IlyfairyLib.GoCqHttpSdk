@@ -21,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Messages\MessageEvent\NoticeEvent\" />
-    <Folder Include="Models\Messages\MessageEvent\RequestEvent\" />
+    <Folder Include="Models\MessageEvent\NoticeEvent\" />
   </ItemGroup>
 
 </Project>

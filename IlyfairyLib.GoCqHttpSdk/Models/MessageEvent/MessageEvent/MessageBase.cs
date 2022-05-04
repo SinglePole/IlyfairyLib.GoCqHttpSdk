@@ -3,7 +3,7 @@ using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using IlyfairyLib.GoCqHttpSdk.Utils;
 using Newtonsoft.Json.Linq;
 
-namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
+namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 
 public abstract class MessageBase<TSender> : MessageEventBase where TSender : Sender
 {

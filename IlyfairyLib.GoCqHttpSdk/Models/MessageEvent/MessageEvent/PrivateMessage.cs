@@ -2,7 +2,7 @@
 using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using Newtonsoft.Json.Linq;
 
-namespace IlyfairyLib.GoCqHttpSdk.Models.Messages;
+namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 
 /// <summary>
 /// 私聊消息

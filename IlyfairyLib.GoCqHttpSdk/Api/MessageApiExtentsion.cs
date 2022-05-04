@@ -196,7 +196,25 @@ public static class MessageApiExtentsion
         }
     }
 
+    /// <summary>
+    /// 允许好友请求
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="flag">flag</param>
+    /// <param name="approve">是否同意加好友请求</param>
+    /// <param name="remark">备注</param>
+    /// <returns>请求是否成功</returns>
+    public static void AgreeFriendRequest(this Session session, string flag, bool approve = true, string? remark = null)
+    {
+        var json = JsonEx.Create()
+            .Set("flag", flag)
+            .Set("approve", approve)
+            .Set("remark", remark);
 
+        _ = SendApiMessageAsync(session, ApiActionType.AgreeFriendRequest, json);
+    }
+
+    
 
     /// <summary>
     /// 撤回消息

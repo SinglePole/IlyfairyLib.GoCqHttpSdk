@@ -160,14 +160,14 @@ public static class MessageApiExtentsion
     }
 
     /// <summary>
-    /// 发送消息 <br/>会根据参数自动判断发送到私聊还是群组
+    /// 获取群信息
     /// </summary>
     /// <param name="session"></param>
     /// <param name="groupId">群ID</param>
+    /// <param name="useCache">是否使用缓存</param>
     /// <returns>成功返回群信息,否则为null</returns>
-    public static async Task<GroupInfo?> GetGroupInfoAsync(this Session session, long groupId,bool useCache = true)
+    public static async Task<GroupInfo?> GetGroupInfoAsync(this Session session, long groupId, bool useCache = true)
     {
-
         var json = JsonEx.Create()
             .Set("group_id", groupId)
             .Set("no_cache", !useCache);

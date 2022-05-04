@@ -28,7 +28,7 @@ public sealed class GroupMessage : MessageBase<GroupSender>
         {
             if (groupInfo == null)
             {
-                session.GetGroupInfoAsync(GroupId, true).GetAwaiter().GetResult();
+                groupInfo = session.GetGroupInfoAsync(GroupId, true).GetAwaiter().GetResult();
             }
             return groupInfo;
         }

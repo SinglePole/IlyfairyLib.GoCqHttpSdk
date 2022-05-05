@@ -3,31 +3,6 @@
 一个cqhttp的C#Sdk  
 使用了类似管道的模式  
 
-=========
-一个cqhttp的C#Sdk  
-使用了类似管道模式  
->>>>>>>>> Temporary merge branch 2
-
-=========
-一个cqhttp的C#Sdk  
-使用了类似管道模式  
->>>>>>>>> Temporary merge branch 2
-
-=========
-一个cqhttp的C#Sdk  
-使用了类似管道模式  
->>>>>>>>> Temporary merge branch 2
-
-=========
-一个cqhttp的C#Sdk  
-使用了类似管道模式  
->>>>>>>>> Temporary merge branch 2
-
-=========
-一个cqhttp的C#Sdk  
-使用了类似管道模式  
->>>>>>>>> Temporary merge branch 2
-
 ## 使用
 
 前往[go-cqhttp Release](https://github.com/Mrs4s/go-cqhttp/releases)下载go-cqhttp  

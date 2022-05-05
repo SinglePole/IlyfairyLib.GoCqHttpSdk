@@ -1,7 +1,7 @@
 # IlyfairyLib.GoCqHttpSdk
 
 一个cqhttp的C#Sdk  
-使用了类似管道模式  
+使用了类似管道的模式  
 
 ## 使用
 

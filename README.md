@@ -1,8 +1,5 @@
 # IlyfairyLib.GoCqHttpSdk
 
-一个cqhttp的C#Sdk  
-使用了类似管道模式  
-
 ## 使用
 
 前往[go-cqhttp Release](https://github.com/Mrs4s/go-cqhttp/releases)下载go-cqhttp  

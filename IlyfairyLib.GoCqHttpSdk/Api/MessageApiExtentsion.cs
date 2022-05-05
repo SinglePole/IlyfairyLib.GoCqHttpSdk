@@ -3,6 +3,7 @@ using IlyfairyLib.GoCqHttpSdk.Models.Api;
 using IlyfairyLib.GoCqHttpSdk.Models.Chunks;
 using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using IlyfairyLib.GoCqHttpSdk.Utils;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -183,7 +184,7 @@ public static class MessageApiExtentsion
                 MemberCount = result.Data?.Value<int>("member_count") ?? 0,
                 MaxMemberCount = result.Data?.Value<int>("max_member_count") ?? 0,
             };
-            
+
             info.Memorandum = result.Data?.Value<string>("group_memo") ?? "";
             if (string.IsNullOrEmpty(info.Memorandum)) info.Memorandum = info.Name;
             info.CreateTime = result.Data?.Value<int>("group_create_time") ?? 0;
@@ -221,7 +222,7 @@ public static class MessageApiExtentsion
     /// <param name="type">请求类型 需要一致</param>
     /// <param name="approve">是否同意加加群请求</param>
     /// <param name="reason">拒绝理由</param>
-    public static void AgreeGroupRequest(this Session session, string flag, GroupRequestType type, bool approve = true, string? reason = null)
+    public static async Task<bool> AgreeGroupRequest(this Session session, string flag, GroupRequestType type, bool approve = true, string? reason = null)
     {
         var json = JsonEx.Create()
             .Set("flag", flag)
@@ -234,10 +235,8 @@ public static class MessageApiExtentsion
             .Set("approve", approve)
             .Set("reason", reason);
 
-        _ = SendApiMessageAsync(session, ApiActionType.AgreeGroupRequest, json);
+        return (await SendApiMessageAsync(session, ApiActionType.AgreeGroupRequest, json)).Success;
     }
-
-    
 
     /// <summary>
     /// 撤回消息
@@ -270,18 +269,176 @@ public static class MessageApiExtentsion
         }
     }
 
-    ///// <summary>
-    ///// 发送赞
-    ///// </summary>
-    ///// <param name="client"></param>
-    ///// <param name="qq"></param>
-    ///// <param name="count"></param>
-    ///// <returns></returns>
-    //public static async Task SendLike(this Session client, long qq, int count)
-    //{
-    //    JObject json = new();
-    //    json["user_id"] = qq;
-    //    json["times"] = count;
-    //    await SendApiMessageAsync(client, ApiActionType.SendLike, json);
-    //}
+
+    /// <summary>
+    /// 上传群文件<br/>
+    /// 只能上传本地文件, 需要上传 http 文件的话请先调用 download_file API下载
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="file">本地文件路径</param>
+    /// <param name="name">储存名称</param>
+    /// <param name="folder">父目录ID<br/>null则上传到根目录</param>
+    /// <returns></returns>
+    public static async Task<bool> UploadGroupFileAsync(this Session session, long groupId, string file, string name, string? folder = null)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("file", file)
+            .Set("name", name)
+            .Set("folder", folder);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.UploadGroupFile, json);
+        return result.Success;
+    }
+
+    /// <summary>
+    /// 获取群文件系统信息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <returns></returns>
+    public static async Task<GroupFileSystemInfo?> GetGroupFileSystemInfoAsync(this Session session, long groupId)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupFileSystemInfo, json);
+
+        if (result.Success)
+        {
+            var file_count = result.Data?.Value<int>("file_count") ?? 0;
+            var limit_count = result.Data?.Value<int>("limit_count") ?? 0;
+            var used_space = result.Data?.Value<long>("used_space") ?? 0;
+            var total_space = result.Data?.Value<long>("total_space") ?? 0;
+            return new GroupFileSystemInfo(groupId, file_count, limit_count, used_space, total_space);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 获取群根目录文件列表
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <returns></returns>
+    public static async Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)> GetGroupRootFilesAsync(this Session session, long groupId)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupRootFiles, json);
+
+        if (result.Success)
+        {
+            List<GroupFileInfo> files = new();
+            List<GroupFolderInfo> folders = new();
+
+            foreach (var item in result.Data?["files"]?.ToArray() ?? Array.Empty<JToken>())
+            {
+                var info = new GroupFileInfo(item);
+                info.fileUrlLazy = new Lazy<Task<string>>(async () =>
+                {
+                    return await session.GetGroupFileUrlAsync(groupId, info.FileId, info.Busid);
+                });
+                files.Add(info);
+            }
+
+            foreach (var item in result.Data?["folders"]?.ToArray() ?? Array.Empty<JToken>())
+            {
+                var info = new GroupFolderInfo(item);
+                info.subFileInfo = new Lazy<Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)>>(async () =>
+                {
+                    return await session.GetGroupSubFolder(groupId, info.FolderId);
+                });
+                folders.Add(info);
+            }
+
+            return (folders.ToArray(), files.ToArray());
+        }
+        else
+        {
+            return (null, null);
+        }
+    }
+
+    /// <summary>
+    /// 获取群子目录文件列表
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="folderId">文件夹ID</param>
+    /// <returns></returns>
+    public static async Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)> GetGroupSubFolder(this Session session, long groupId, string folderId)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("folder_id", folderId);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupFilesByFolder, json);
+
+        if (result.Success)
+        {
+            List<GroupFileInfo> files = new();
+            List<GroupFolderInfo> folders = new();
+
+            foreach (var item in result.Data?["files"]?.ToArray() ?? Array.Empty<JToken>())
+            {
+                var info = new GroupFileInfo(item);
+                info.fileUrlLazy = new Lazy<Task<string>>(async () =>
+                {
+                    return await session.GetGroupFileUrlAsync(groupId, info.FileId, info.Busid);
+                });
+                files.Add(info);
+            }
+
+            foreach (var item in result.Data?["folders"]?.ToArray() ?? Array.Empty<JToken>())
+            {
+                var info = new GroupFolderInfo(item);
+                info.subFileInfo = new Lazy<Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)>>(async () =>
+                {
+                    return await session.GetGroupSubFolder(groupId, info.FolderId);
+                });
+                folders.Add(info);
+            }
+
+            return (folders.ToArray(), files.ToArray());
+        }
+        else
+        {
+            return (null, null);
+        }
+    }
+
+    /// <summary>
+    /// 获取群文件链接
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="fileId">文件ID</param>
+    /// <param name="busid">Busid</param>
+    /// <returns>返回Url</returns>
+    public static async Task<string?> GetGroupFileUrlAsync(this Session session, long groupId, string fileId, int busid)
+    {
+        Console.WriteLine("开始获取链接");
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("file_id", fileId)
+            .Set("busid", busid);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupFileUrl, json);
+
+        if (result.Success)
+        {
+            return result.Data?.Value<string>("url");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 }

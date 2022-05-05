@@ -1,5 +1,6 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 
@@ -32,6 +33,27 @@ public sealed class GroupMessage : MessageBase<GroupSender>, IGroupInfo
     }
 
     GroupInfo IGroupInfo.GroupInfo { get => GroupInfo; init => groupInfo = value; }
+    
+
+    internal Lazy<Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)>> groupFilesLazy;
+    /// <summary>
+    /// 获取根目录文件列表
+    /// </summary>
+    /// <returns></returns>
+    public async Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)> GetRootFiles()
+    {
+        return await groupFilesLazy.Value;
+    }
+    
+    internal Lazy<Task<GroupFileSystemInfo>> groupFileSystemInfoLazy;
+    /// <summary>
+    /// 获取群文件系统信息
+    /// </summary>
+    /// <returns></returns>
+    public async Task<GroupFileSystemInfo> GetFileSystemInfo()
+    {
+        return await groupFileSystemInfoLazy.Value;
+    }
 
     /// <summary>
     /// 刷新群信息
@@ -48,5 +70,13 @@ public sealed class GroupMessage : MessageBase<GroupSender>, IGroupInfo
     {
         Sender = GroupSender.Get(json["sender"]);
         GroupId = json.Value<long>("group_id");
+        groupFilesLazy = new(async () =>
+        {
+            return await session.GetGroupRootFilesAsync(GroupId);
+        });
+        groupFileSystemInfoLazy = new(async () =>
+        {
+            return await session.GetGroupFileSystemInfoAsync(GroupId);
+        });
     }
 }

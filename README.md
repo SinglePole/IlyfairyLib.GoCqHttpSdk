@@ -1,14 +1,17 @@
 # IlyfairyLib.GoCqHttpSdk
 
+一个cqhttp的C#Sdk
+使用了类似管道模式
+
 ## 使用
 
-前往[go-cqhttp Release](https://github.com/Mrs4s/go-cqhttp/releases)下载go-cqhttp
+前往[go-cqhttp Release](https://github.com/Mrs4s/go-cqhttp/releases)下载go-cqhttp  
 
-将config.yml里的message.post-format改成array
+将config.yml里的message.post-format改成array  
 
-开启http和ws
+开启http和ws  
 
-下载NuGet包: IlyfairyLib.GoCqHttpSdk
+下载NuGet包: IlyfairyLib.GoCqHttpSdk  
 
 
 

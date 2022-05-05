@@ -136,6 +136,10 @@ public class GroupFolderInfo
     public int TotalFileCount { get; init; }
 
     internal Lazy<Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)>> subFileInfo;
+    /// <summary>
+    /// 获取文件夹里的所有 文件/文件夹
+    /// </summary>
+    /// <returns></returns>
     public async Task<(GroupFolderInfo[] folders, GroupFileInfo[] files)> GetSubFilesInfo()
     {
         return await subFileInfo.Value;

@@ -14,6 +14,6 @@ public struct MessageApiResult
     public JObject? Data { get; set; }
     public int ReturnCode { get; set; }
     public string Wording { get; set; }
-    public bool Success { get => ReturnCode == 0 || ReturnCode == 1; }
+    public bool Success { get => ReturnCode is 0 or 1; }
 
 }

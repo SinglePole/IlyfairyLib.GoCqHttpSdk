@@ -1,5 +1,4 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.Shared;
-using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 
 namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;

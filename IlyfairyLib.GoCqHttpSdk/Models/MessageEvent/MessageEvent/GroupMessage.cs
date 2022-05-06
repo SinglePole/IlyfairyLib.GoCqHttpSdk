@@ -9,6 +9,9 @@ namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
 /// </summary>
 public sealed class GroupMessage : MessageBase<GroupSender>, IGroupInfo
 {
+    /// <summary>
+    /// 群消息类型<br/>始终是MessageType.GroupMessage
+    /// </summary>
     public override MessageType MessageSubType => MessageType.GroupMessage;
     /// <summary>
     /// 群号
@@ -17,7 +20,7 @@ public sealed class GroupMessage : MessageBase<GroupSender>, IGroupInfo
     /// <summary>
     /// 匿名消息
     /// </summary>
-    public Anonymous Anonymous { get; init; }
+    public Anonymous? Anonymous { get; init; }
 
     private GroupInfo? groupInfo;
     /// <summary>

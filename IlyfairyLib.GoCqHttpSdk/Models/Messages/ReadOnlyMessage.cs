@@ -13,6 +13,9 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
 {
     private readonly Session _session;
     private readonly MessageBuilder _builder;
+    /// <summary>
+    /// 消息块
+    /// </summary>
     public ReadOnlyCollection<MessageChunk> Chunks { get; }
 
     /// <summary>

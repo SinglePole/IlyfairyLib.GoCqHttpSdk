@@ -3,7 +3,7 @@
 一个cqhttp的C#Sdk  
 使用了类似管道的模式  
 
-## 使用
+## 使用  
 
 前往[go-cqhttp Release](https://github.com/Mrs4s/go-cqhttp/releases)下载go-cqhttp  
 
@@ -13,9 +13,15 @@
 
 下载NuGet包: IlyfairyLib.GoCqHttpSdk  
 
+## 说明  
 
+### 接收消息事件
+session.Use*可以选择是否继续向下传递  
+session.Map*如果匹配到了 则不会向下传递  
 
-## 示例
+### 
+
+## 示例  
 
 ``` C#
 using IlyfairyLib.GoCqHttpSdk;

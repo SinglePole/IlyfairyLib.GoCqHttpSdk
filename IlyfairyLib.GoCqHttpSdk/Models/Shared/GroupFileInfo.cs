@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Flurl.Http;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,9 +59,23 @@ public class GroupFileInfo
     public string UploaderName { get; init; }
 
     internal Lazy<Task<string>> fileUrlLazy;
+    /// <summary>
+    /// 获取文件链接
+    /// </summary>
+    /// <returns>返回文件url</returns>
     public async Task<string> GetFileUrl()
     {
         return await fileUrlLazy.Value;
+    }
+
+    /// <summary>
+    /// 获取网络流
+    /// </summary>
+    /// <returns>返回文件的流</returns>
+    public async Task<Stream> GetStream()
+    {
+        var url = await GetFileUrl();
+        return await url.GetStreamAsync();
     }
 
     internal GroupFileInfo(JToken json)

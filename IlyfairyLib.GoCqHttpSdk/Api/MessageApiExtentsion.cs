@@ -423,7 +423,6 @@ public static class MessageApiExtentsion
     /// <returns>返回Url</returns>
     public static async Task<string?> GetGroupFileUrlAsync(this Session session, long groupId, string fileId, int busid)
     {
-        Console.WriteLine("开始获取链接");
         var json = JsonEx.Create()
             .Set("group_id", groupId)
             .Set("file_id", fileId)

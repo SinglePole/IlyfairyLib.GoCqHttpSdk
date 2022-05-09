@@ -53,18 +53,20 @@ public class GroupReuqestMessage : MessageEventBase, IGroupInfo
     /// <summary>
     /// 同意 加群请求/被邀请入群
     /// </summary>
-    public void Agree()
+    /// <returns>返回操作是否成功</returns>
+    public async Task<bool> Agree()
     {
-        session.AgreeGroupRequest(Flag, RequestType, true);
+        return await session.AgreeGroupRequestAsync(Flag, RequestType, true);
     }
 
     /// <summary>
     /// 拒绝 加群请求/被邀请入群
     /// </summary>
     /// <param name="reason">拒绝理由</param>
-    public void Refuse(string reason = null)
+    /// <returns>返回操作是否成功</returns>
+    public async Task<bool> Refuse(string reason = null)
     {
-        session.AgreeGroupRequest(Flag, RequestType, false, reason);
+        return await session.AgreeGroupRequestAsync(Flag, RequestType, false, reason);
     }
 
     GroupInfo IGroupInfo.GroupInfo { get => GroupInfo; init => groupInfo = value; }

@@ -204,14 +204,14 @@ public static class MessageApiExtentsion
     /// <param name="flag">flag</param>
     /// <param name="approve">是否同意加好友请求</param>
     /// <param name="remark">备注</param>
-    public static void AgreeFriendRequest(this Session session, string flag, bool approve = true, string? remark = null)
+    public static async Task<bool> AgreeFriendRequest(this Session session, string flag, bool approve = true, string? remark = null)
     {
         var json = JsonEx.Create()
             .Set("flag", flag)
             .Set("approve", approve)
             .Set("remark", remark);
 
-        _ = SendApiMessageAsync(session, ApiActionType.AgreeFriendRequest, json);
+        return (await SendApiMessageAsync(session, ApiActionType.AgreeFriendRequest, json)).Success;
     }
 
     /// <summary>
@@ -222,7 +222,7 @@ public static class MessageApiExtentsion
     /// <param name="type">请求类型 需要一致</param>
     /// <param name="approve">是否同意加加群请求</param>
     /// <param name="reason">拒绝理由</param>
-    public static async Task<bool> AgreeGroupRequest(this Session session, string flag, GroupRequestType type, bool approve = true, string? reason = null)
+    public static async Task<bool> AgreeGroupRequestAsync(this Session session, string flag, GroupRequestType type, bool approve = true, string? reason = null)
     {
         var json = JsonEx.Create()
             .Set("flag", flag)
@@ -244,12 +244,12 @@ public static class MessageApiExtentsion
     /// <param name="session"></param>
     /// <param name="messageId">消息ID</param>
     /// <returns></returns>
-    public static async Task DeleteMessageAsync(this Session session, int messageId)
+    public static async Task<bool> DeleteMessageAsync(this Session session, int messageId)
     {
         JObject json = new();
         json["message_id"] = messageId;
 
-        await SendApiMessageAsync(session, ApiActionType.SendMessage, json);
+        return (await SendApiMessageAsync(session, ApiActionType.SendMessage, json)).Success;
     }
 
     /// <summary>

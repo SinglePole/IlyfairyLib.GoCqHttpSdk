@@ -24,7 +24,7 @@ Session.Map\*如果匹配到了 则不会向下传递
 
 ### Api 
 
-后缀为Async的Api为异步  
+后缀为Async的Api均为异步  
 使用HttpPost来发送消息  
 
 ## 示例 

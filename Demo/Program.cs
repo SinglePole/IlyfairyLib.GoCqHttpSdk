@@ -7,7 +7,7 @@ Session session = new("ws://127.0.0.1:6700", "http://127.0.0.1:5700");
 //接收所有群消息
 session.UseGroupMessage(async v =>
 {
-    Console.WriteLine($"消息json: \n{v.Message.ToJson()}");
+    Console.WriteLine($"消息json: \n{v.Message.RawMessage}");
     return true; //继续向下传递
 });
 

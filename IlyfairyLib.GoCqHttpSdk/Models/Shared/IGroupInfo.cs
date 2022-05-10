@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IlyfairyLib.GoCqHttpSdk.Models.Shared
+namespace IlyfairyLib.GoCqHttpSdk.Models.Shared;
+
+public  interface IGroupInfo
 {
-    public  interface IGroupInfo
-    {
-        public GroupInfo GroupInfo { get; init; }
-        public long GroupId { get; init; }
-    }
+    public GroupInfo GroupInfo { get; init; }
+    public long GroupId { get; init; }
 }

@@ -84,11 +84,17 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <summary>
-    /// 获取消息的Json
+    /// 获取获取消息段的Json字符串
     /// </summary>
     /// <returns></returns>
-    public override string ToString()
+    public string ToJsonString()
     {
-        return _builder.ToString(); 
+        return _builder.ToJsonString();
     }
+
+    /// <summary>
+    /// 获取消息的RawMessage
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString() => RawMessage;
 }

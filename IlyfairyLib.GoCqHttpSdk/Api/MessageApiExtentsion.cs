@@ -258,17 +258,20 @@ public static class MessageApiExtentsion
     /// <param name="session"></param>
     /// <param name="messageId">消息ID</param>
     /// <returns></returns>
-    internal static async Task GetMessage(this Session session, int messageId)
+    public static async Task<ReadOnlyMessage?> GetMessageAsync(this Session session, int messageId)
     {
         JObject json = new();
         json["message_id"] = messageId;
         var result = await SendApiMessageAsync(session, ApiActionType.GetMessage, json);
-        if (result.Success)
+        if (result.Success && result.Data != null)
         {
-            //return result.Data;
+            return new ReadOnlyMessage(session, result.Data);
+        }
+        else
+        {
+            return null;
         }
     }
-
 
     /// <summary>
     /// 上传群文件<br/>

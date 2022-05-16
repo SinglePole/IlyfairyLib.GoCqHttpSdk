@@ -33,7 +33,6 @@ public static class MessageApiExtentsion
     internal static async Task<MessageApiResult> SendApiMessageAsync(Session server, ApiActionType action, JObject @params)
     {
         var result = await SendApiAsync(server, action, @params);
-        Console.WriteLine(@params);
         try
         {
             var json = JObject.Parse(result);
@@ -71,7 +70,6 @@ public static class MessageApiExtentsion
         var json = JsonEx.Create()
             .Set("group_id", groupId)
             .Set("message", message.ToJArray());
-        Console.WriteLine(json);
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupMessage, json);
         if (result.Success)
         {
@@ -265,7 +263,7 @@ public static class MessageApiExtentsion
         var result = await SendApiMessageAsync(session, ApiActionType.GetMessage, json);
         if (result.Success && result.Data != null)
         {
-            return new ReadOnlyMessage(session, result.Data);
+            return ReadOnlyMessage.Parse(session, result.Data);
         }
         else
         {
@@ -436,6 +434,29 @@ public static class MessageApiExtentsion
         if (result.Success)
         {
             return result.Data?.Value<string>("url");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 获取合并转发内容
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="forwardId">合并转发ID</param>
+    /// <returns>返回Url</returns>
+    internal static async Task<JArray?> GetForwardMessageAsync(this Session session, string forwardId)
+    {
+        var json = JsonEx.Create()
+            .Set("message_id", forwardId);
+
+        var result = await SendApiMessageAsync(session, ApiActionType.GetForwardMessage, json);
+
+        if (result.Success)
+        {
+            return result.Data?["messages"] as JArray;
         }
         else
         {

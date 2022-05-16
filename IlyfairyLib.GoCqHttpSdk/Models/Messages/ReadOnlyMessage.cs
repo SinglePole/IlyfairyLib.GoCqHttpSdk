@@ -33,7 +33,7 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
     /// <summary>
     /// 消息ID
     /// </summary>
-    public int MessageId { get; init; } = -1;
+    public int Id { get; init; } = -1;
 
     private bool? isAtRobot;
     /// <summary>
@@ -70,7 +70,7 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
         this._builder = new(builder);
         this.Chunks = new(builder);
         
-        MessageId = messageId;
+        Id = messageId;
         RawMessage = rawMessage;
         Text = RawMessage.ToText();
         TextOnly = string.Join("", builder.Where(v => v.Type == MessageChunkType.text));
@@ -97,4 +97,10 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
     /// </summary>
     /// <returns></returns>
     public override string ToString() => RawMessage;
+
+    internal static ReadOnlyMessage? Parse(Session session, JToken? jToken)
+    {
+        if (jToken == null) return null;
+        return new(session, jToken);
+    }
 }

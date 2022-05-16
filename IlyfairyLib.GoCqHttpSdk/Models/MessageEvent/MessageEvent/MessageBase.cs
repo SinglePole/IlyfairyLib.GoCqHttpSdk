@@ -38,6 +38,6 @@ public abstract class MessageBase<TSender> : MessageEventBase where TSender : Se
         Font = json.Value<int>("font");
         QQ = json.Value<long>("user_id");
 
-        Message = new(session, json);
+        Message = ReadOnlyMessage.Parse(session, json);
     }
 }

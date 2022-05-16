@@ -39,4 +39,8 @@ public struct ApiActionType
     /// 获取群文件资源链接
     /// </summary>
     public static ApiActionType GetGroupFileUrl => new("get_group_file_url");
+    /// <summary>
+    /// 获取合并转发内容
+    /// </summary>
+    public static ApiActionType GetForwardMessage => new("get_forward_msg");
 }

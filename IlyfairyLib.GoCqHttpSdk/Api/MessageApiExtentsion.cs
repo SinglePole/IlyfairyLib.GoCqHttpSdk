@@ -33,7 +33,7 @@ public static class MessageApiExtentsion
     internal static async Task<MessageApiResult> SendApiMessageAsync(Session server, ApiActionType action, JObject @params)
     {
         var result = await SendApiAsync(server, action, @params);
-
+        Console.WriteLine(@params);
         try
         {
             var json = JObject.Parse(result);
@@ -71,7 +71,7 @@ public static class MessageApiExtentsion
         var json = JsonEx.Create()
             .Set("group_id", groupId)
             .Set("message", message.ToJArray());
-
+        Console.WriteLine(json);
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupMessage, json);
         if (result.Success)
         {

@@ -22,4 +22,25 @@ public sealed class PokeChunk : MessageChunk
         //Name = name;
     }
 
+    /// <summary>
+    /// 艾特QQ是否相等
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    public static bool operator ==(PokeChunk left,PokeChunk right)
+    {
+        return left.QQ == right.QQ;
+    }
+    
+    /// <summary>
+    /// 艾特QQ是否相等
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <returns></returns>
+    public static bool operator !=(PokeChunk left,PokeChunk right)
+    {
+        return left.QQ != right.QQ;
+    }
 }

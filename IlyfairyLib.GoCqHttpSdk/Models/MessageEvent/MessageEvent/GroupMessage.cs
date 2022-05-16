@@ -1,4 +1,5 @@
-﻿using IlyfairyLib.GoCqHttpSdk.Models.Shared;
+﻿using IlyfairyLib.GoCqHttpSdk.Models.Chunks;
+using IlyfairyLib.GoCqHttpSdk.Models.Shared;
 using System.Threading.Tasks;
 
 namespace IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
@@ -67,6 +68,15 @@ public sealed class GroupMessage : MessageBase<GroupSender>, IGroupInfo
         return groupInfo;
     }
 
+    /// <summary>
+    /// 发送合并转发
+    /// </summary>
+    /// <param name="nodes">合并转发节点</param>
+    /// <returns></returns>
+    public async Task SendForwardMessageAsync(params NodeChunk[] nodes)
+    {
+        await session.SendGroupForwardMessageAsync(GroupId, nodes);
+    }
 
     internal GroupMessage(Session session, JToken json) : base(session, json)
     {

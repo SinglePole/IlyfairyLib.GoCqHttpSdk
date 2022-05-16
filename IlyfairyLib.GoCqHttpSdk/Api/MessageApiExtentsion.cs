@@ -469,19 +469,18 @@ public static class MessageApiExtentsion
     /// </summary>
     /// <param name="session"></param>
     /// <param name="groupId">群号</param>
-    /// <param name="messages">消息</param>
+    /// <param name="nodes">消息</param>
     /// <returns>返回Url</returns>
-    public static async Task SendGroupForwardMessageAsync(this Session session, long groupId,params NodeChunk[] messages)
+    public static async Task SendGroupForwardMessageAsync(this Session session, long groupId, params NodeChunk[] nodes)
     {
         JArray array = new();
-        foreach (var item in messages)
+        foreach (var item in nodes)
         {
             array.Add(item.ToJson());
         }
         var json = JsonEx.Create()
             .Set("group_id", groupId)
             .Set("messages", array);
-
 
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupForwardMessage, json);
     }

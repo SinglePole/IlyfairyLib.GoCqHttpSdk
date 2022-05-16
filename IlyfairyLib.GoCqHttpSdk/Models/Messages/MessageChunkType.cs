@@ -25,6 +25,7 @@ public enum MessageChunkType
     dice,
     shake,
     poke,
+    gift,
     share,
     contact,
     /// <summary>

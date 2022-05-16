@@ -36,6 +36,7 @@ public enum MessageChunkType
     reply,
     forward,
     node,
+    redbag,
     /// <summary>
     /// Xml消息
     /// </summary>

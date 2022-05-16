@@ -13,16 +13,18 @@ namespace IlyfairyLib.GoCqHttpSdk.Utils
         // ] &#93;
         
         
-        public static string ToText(this string rawText)
+        public static string? ToText(this string? rawText)
         {
+            if (rawText is null) return null;
             return rawText
                 .Replace("&amp;", "&")
                 .Replace("&#91;", "[")
                 .Replace("&#93;", "]");
         }
         
-        public static string ToRawText(this string text)
+        public static string? ToRawText(this string? text)
         {
+            if (text is null) return null;
             return text
                 .Replace("&", "&amp;")
                 .Replace("[", "&#91;")

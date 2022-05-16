@@ -256,14 +256,14 @@ public static class MessageApiExtentsion
     /// <param name="session"></param>
     /// <param name="messageId">消息ID</param>
     /// <returns></returns>
-    public static async Task<ReadOnlyMessage?> GetMessageAsync(this Session session, int messageId)
+    public static async Task<HistoryMessage?> GetMessageAsync(this Session session, int messageId)
     {
         JObject json = new();
         json["message_id"] = messageId;
         var result = await SendApiMessageAsync(session, ApiActionType.GetMessage, json);
         if (result.Success && result.Data != null)
         {
-            return ReadOnlyMessage.Parse(session, result.Data);
+            return HistoryMessage.Parse(session, result.Data);
         }
         else
         {
@@ -462,6 +462,28 @@ public static class MessageApiExtentsion
         {
             return null;
         }
+    }
+
+    /// <summary>
+    /// 发送合并转发 (群)
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="messages">消息</param>
+    /// <returns>返回Url</returns>
+    public static async Task SendGroupForwardMessageAsync(this Session session, long groupId,params NodeChunk[] messages)
+    {
+        JArray array = new();
+        foreach (var item in messages)
+        {
+            array.Add(item.ToJson());
+        }
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("messages", array);
+
+
+        var result = await SendApiMessageAsync(session, ApiActionType.SendGroupForwardMessage, json);
     }
 
 }

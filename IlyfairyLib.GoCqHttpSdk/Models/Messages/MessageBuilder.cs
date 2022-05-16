@@ -99,7 +99,7 @@ public class MessageBuilder : List<MessageChunk>
         return ToJsonString();
     }
 
-    internal static MessageBuilder? Parse(JArray array)
+    internal static MessageBuilder? Parse(JArray? array)
     {
         if (array == null) return null;
         var builder = new MessageBuilder();

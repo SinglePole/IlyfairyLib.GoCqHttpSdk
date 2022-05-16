@@ -33,8 +33,9 @@ public record Sender
     /// </summary>
     public Sex Sex { get; init; }
 
-    internal static Sender Get(JToken json)
+    internal static Sender? Get(JToken? json)
     {
+        if (json is null) return null;
         var age = json.Value<int>("age");
         var nickname = json.Value<string>("nickname") ?? "";
         var sex = json.Value<string>("sex");

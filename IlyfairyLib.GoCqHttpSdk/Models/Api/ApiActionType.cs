@@ -43,4 +43,8 @@ public struct ApiActionType
     /// 获取合并转发内容
     /// </summary>
     public static ApiActionType GetForwardMessage => new("get_forward_msg");
+    /// <summary>
+    /// 发送合并转发 (群)
+    /// </summary>
+    public static ApiActionType SendGroupForwardMessage => new("send_group_forward_msg");
 }

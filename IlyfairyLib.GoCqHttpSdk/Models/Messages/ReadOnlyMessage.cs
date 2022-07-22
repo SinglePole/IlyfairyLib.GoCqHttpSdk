@@ -39,7 +39,7 @@ public class ReadOnlyMessage : IEnumerable<MessageChunk>
     /// <summary>
     /// 是否艾特了机器人
     /// </summary>
-    public bool IsAtRobot 
+    public bool IsAtSelf 
     {
         get 
         {

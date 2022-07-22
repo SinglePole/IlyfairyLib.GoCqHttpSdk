@@ -147,7 +147,7 @@ public static class MessageApiExtentsion
             .Set("user_id", qq)
             .Set("message", message.ToJArray());
 
-        var result = await SendApiMessageAsync(session, ApiActionType.DeleteMessage, json);
+        var result = await SendApiMessageAsync(session, ApiActionType.SendMessage, json);
         if (result.Success)
         {
             return result.Data?.Value<int>("message_id");
@@ -247,7 +247,7 @@ public static class MessageApiExtentsion
         JObject json = new();
         json["message_id"] = messageId;
 
-        return (await SendApiMessageAsync(session, ApiActionType.SendMessage, json)).Success;
+        return (await SendApiMessageAsync(session, ApiActionType.DeleteMessage, json)).Success;
     }
 
     /// <summary>
@@ -483,6 +483,23 @@ public static class MessageApiExtentsion
             .Set("messages", array);
 
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupForwardMessage, json);
+    }
+    /// <summary>
+    /// 群组单人禁言
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="qq">禁言的qq</param>
+    /// <param name="duration">禁言时长</param>
+    /// <returns>返回Url</returns>
+    public static async Task SetGroupBan(this Session session, long groupId, long qq, long duration = 30 * 60)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("user_id", qq)
+            .Set("duration", duration);
+
+        await SendApiMessageAsync(session, ApiActionType.SetGroupBan, json);
     }
 
 }

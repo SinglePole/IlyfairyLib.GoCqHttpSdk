@@ -47,4 +47,8 @@ public struct ApiActionType
     /// 发送合并转发 (群)
     /// </summary>
     public static ApiActionType SendGroupForwardMessage => new("send_group_forward_msg");
+    /// <summary>
+    /// 群组单人禁言
+    /// </summary>
+    public static ApiActionType SetGroupBan => new("set_group_ban");
 }

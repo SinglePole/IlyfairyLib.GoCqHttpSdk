@@ -34,7 +34,7 @@ public struct ApiActionType
     /// <summary>
     /// 设置精华消息
     /// </summary>
-    public static ApiActionType SetEssenceMsg => new ("set_essence_msg")'
+    public static ApiActionType SetEssenceMsg => new("set_essence_msg");
     /// <summary>
     /// 获取群消息历史记录
     /// </summary>
@@ -42,7 +42,7 @@ public struct ApiActionType
     /// <summary>
     /// 获取当前账号在线客户端列表
     /// </summary>
-    public static ApiActionType GetOnlineClients => new ("get_online_clients")
+    public static ApiActionType GetOnlineClients => new("get_online_clients");
     /// <summary>
     /// 下载文件到缓存目录
     /// </summary>
@@ -51,7 +51,7 @@ public struct ApiActionType
     /// 重载事件过滤器
     /// </summary>
     public static ApiActionType ReloadEventFilter => new ("reload_event_filter");
-;   /// <summary>
+    /// <summary>
     /// 获取群公告
     /// </summary>
     public static ApiActionType GetGroupNotice => new("_get_group_notice");

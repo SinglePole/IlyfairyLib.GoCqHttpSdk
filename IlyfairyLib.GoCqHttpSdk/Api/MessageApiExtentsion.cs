@@ -501,5 +501,89 @@ public static class MessageApiExtentsion
 
         await SendApiMessageAsync(session, ApiActionType.SetGroupBan, json);
     }
-
+    /// <summary>
+    /// 群组踢人
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="qq">要禁言的 QQ 号</param>
+    /// <param name="duration">	禁言时长, 单位秒, 0 表示取消禁言</param>>
+    /// <returns>成功返回消息true,否则为null</returns>
+    public static async Task<bool> SetGroupKickAsync(this Session session, long groupId, long qq, bool reject_add_request = false)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("user_id", qq)
+            .Set("reject_add_request", reject_add_request);
+        var result = await SendApiMessageAsync(session, ApiActionType.SetGroupKick, json);
+        return result.Success;
+    }
+    /// <summary>
+    /// 获取群成员信息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="qq">QQ</param>
+    /// <param name="no_cache">是否不使用缓存（使用缓存可能更新不及时, 但响应更快）</param>
+    /// <returns>成功返回群成员信息,否则为null</returns>
+    public static async Task<GroupMemberInfo?> GetGroupMemberInfoAsync(this Session session, long groupId, long qq, bool no_cache = false)
+    {
+        var json = JsonEx.Create()
+        .Set("group_id", groupId)
+        .Set("user_id", qq)
+        .Set("no_cache", no_cache);
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupMemberInfo, json);
+        if (result.Success)
+        {
+            GroupMemberInfo info = new GroupMemberInfo();
+            info.groupId = result.Data?.Value<long>("group_id") ?? 0;
+            info.qq = result.Data?.Value<long>("user_id") ?? 0;
+            info.nickname = result.Data?.Value<string>("nickname") ?? "";
+            info.card = result.Data?.Value<string>("card") ?? "";
+            info.sex = result.Data?.Value<string>("sex") ?? "";
+            info.age = result.Data?.Value<int>("age") ?? 0;
+            info.area = result.Data?.Value<string>("area") ?? "";
+            info.join_time = result.Data?.Value<int>("join_time") ?? 0;
+            info.last_sent_time = result.Data?.Value<int>("last_sent_time") ?? 0;
+            info.level = result.Data?.Value<string>("level") ?? "";
+            info.role = result.Data?.Value<string>("role") ?? "";
+            info.unfriendly = result.Data?.Value<bool>("unfriendly") ?? false;
+            info.title = result.Data?.Value<string>("title") ?? "";
+            info.title_expire_time = result.Data?.Value<long>("title_expire_time") ?? 0;
+            info.card_changeable = result.Data?.Value<bool>("card_changeable") ?? true;
+            info.shut_up_timestamp = result.Data?.Value<long>("shut_up_timestamp") ?? 0;
+            return info;
+        }
+        return null;
+    }
+    /// <summary>
+    /// 获取陌生人信息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="qq">QQ</param>
+    /// <param name="no_cache">是否不使用缓存（使用缓存可能更新不及时, 但响应更快，默认不使用）</param>
+    /// <returns>成功返回消息id,否则为null</returns>
+    public static async Task<StrangerInfo?> GetStrangerInfoAsync(this Session session, long qq, bool no_cache = false)
+    {
+        var json = JsonEx.Create()
+            .Set("user_id", qq)
+            .Set("no_cache", no_cache);
+        var result = await SendApiMessageAsync(session, ApiActionType.GetStrangerInfo, json);
+        if (result.Success)
+        {
+            StrangerInfo info = new StrangerInfo();
+            info.qq = result.Data?.Value<long>("user_id") ?? 0;
+            info.nickname = result.Data?.Value<string>("nickname") ?? "";
+            info.sex = result.Data?.Value<string>("sex") ?? "";
+            info.age = result.Data?.Value<int>("age") ?? 0;
+            info.qid = result.Data?.Value<string>("qid") ?? "";
+            info.level = result.Data?.Value<int>("level") ?? 0;
+            info.login_days = result.Data?.Value<int>("login_days") ?? 0;
+            return info;
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

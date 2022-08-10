@@ -21,19 +21,29 @@ public sealed class NodeChunk : MessageChunk
     /// 发送者QQ号
     /// </summary>
     public long QQ { get; set; }
-    public MessageBuilder Content { get; set; }
+    //public MessageBuilder Content { get; set; }
+    public string Content { get; set; }
 
-    internal NodeChunk(MessageBuilder content, string name, long qq)
+    internal NodeChunk(string name, long qq, MessageBuilder content)
     {
         Data["name"] = name;
         Data["uin"] = qq;
         Data["content"] = content.ToJson();
         QQ = qq;
         Name = name;
-        Content = content;
+        Content = content.ToJson().ToString();
+    }
+    public NodeChunk(string name, long qq, string rawContent)
+    {
+        Data["name"] = name;
+        Data["uin"] = qq;
+        Data["content"] = rawContent;
+        QQ = qq;
+        Name = name;
+        Content = rawContent;
     }
 
-    public NodeChunk(string name, long qq, params MessageChunk[] chunks) : this(new MessageBuilder(chunks), name, qq)
+    public NodeChunk(string name, long qq, params MessageChunk[] chunks) : this(name, qq, new MessageBuilder(chunks))
     {
 
     }

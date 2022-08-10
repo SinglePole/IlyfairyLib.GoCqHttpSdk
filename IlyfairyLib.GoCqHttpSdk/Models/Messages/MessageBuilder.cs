@@ -14,6 +14,15 @@ public class MessageBuilder : List<MessageChunk>
     {
 
     }
+
+    /// <summary>
+    /// 未实现
+    /// </summary>
+    /// <param name="rawMessage"></param>
+    public MessageBuilder(string rawMessage)
+    {
+    }
+
     public MessageBuilder(IEnumerable<MessageChunk> messageChunks)
     {
         AddRange(messageChunks);

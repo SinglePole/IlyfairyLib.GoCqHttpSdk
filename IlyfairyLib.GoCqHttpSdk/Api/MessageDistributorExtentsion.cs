@@ -1,4 +1,5 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
+using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent.RequestEvent;
 using IlyfairyLib.GoCqHttpSdk.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -47,6 +48,19 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
             session.MessageFuncs.Add((
                 new(v => func((v as GroupReuqestMessage)!)),
                 MessageType.RequestGroup));
+            return session;
+        }
+
+        /// <summary>
+        /// 创建 好友请求 中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        public static Session UseFirendRequestMessage(this Session session, Func<FriendRequestMessage, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as FriendRequestMessage)!)),
+                MessageType.RequestFriend));
             return session;
         }
 

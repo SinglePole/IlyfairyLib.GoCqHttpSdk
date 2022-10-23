@@ -130,9 +130,35 @@ public static class MessageApiExtentsion
         }
     }
 
+    /// <summary>
+    /// 发送私聊临时信息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="qq">QQ</param>
+    /// <param name="GroupId">通过哪个群发送临时会话（必须是管理员）</param>
+    /// <param name="message">消息</param>
+    /// <returns>成功返回消息id,否则为null</returns>
+    public static async Task<int?> SendTempPrivateMessageAsync(this Session session, long qq, long GroupId, MessageBuilder message)
+    {
+        var json = JsonEx.Create()
+            .Set("user_id", qq)
+            .Set("group_id", GroupId)
+            .Set("message", message.ToJArray());
+
+        var result = await SendApiMessageAsync(session, ApiActionType.SendPrivateMessage, json);
+        if (result.Success)
+        {
+            return result.Data?.Value<int>("message_id");
+        }
+        else
+        {
+            return null;
+        }
+    }
+
 
     /// <summary>
-    /// 发送消息 <br/>会根据参数自动判断发送到私聊还是群组
+    /// 发送消息 <br/>会根据参数自动判断发送到私聊还是群组（有问题，勿用）
     /// </summary>
     /// <param name="session"></param>
     /// <param name="group">群ID</param>

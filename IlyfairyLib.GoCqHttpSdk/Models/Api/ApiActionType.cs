@@ -206,7 +206,7 @@ public struct ApiActionType
     /// <summary>
     /// 处理加好友请求
     /// </summary>
-    public static ApiActionType AgreeFriendRequest => new("set_friend_add_request ");
+    public static ApiActionType AgreeFriendRequest => new("set_friend_add_request");
     /// <summary>
     /// 处理加群请求／邀请
     /// </summary>

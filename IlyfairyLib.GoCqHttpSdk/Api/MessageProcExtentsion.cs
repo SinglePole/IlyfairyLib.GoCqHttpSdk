@@ -1,4 +1,5 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
+using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent.RequestEvent;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -56,7 +57,7 @@ internal static class MessageProcExtentsion
                     },
                     "request" => json.Value<string>("request_type") switch
                     {
-                        "friend" => null,
+                        "friend" => new FriendRequestMessage(session,json),
                         "group" => json.Value<string>("sub_type") switch
                         {
                             "add" => new GroupReuqestMessage(session, json),

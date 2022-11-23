@@ -11,24 +11,48 @@ namespace IlyfairyLib.GoCqHttpSdk.Utils
         // & &amp;
         // [ &#91;
         // ] &#93;
-        
-        
+
+
         public static string? ToText(this string? rawText)
         {
             if (rawText is null) return null;
-            return rawText
-                .Replace("&amp;", "&")
-                .Replace("&#91;", "[")
-                .Replace("&#93;", "]");
+            StringBuilder s = new(rawText);
+            s.Replace("&amp;", "&");
+            s.Replace("&#91;", "[");
+            s.Replace("&#93;", "]");
+            return s.ToString();
         }
-        
+
         public static string? ToRawText(this string? text)
         {
             if (text is null) return null;
-            return text
-                .Replace("&", "&amp;")
-                .Replace("[", "&#91;")
-                .Replace("]", "&#93;");
+            StringBuilder s = new(text);
+            s.Replace("&", "&amp;");
+            s.Replace("[", "&#91;");
+            s.Replace("]", "&#93;");
+            return s.ToString();
+        }
+
+        public static string? ToJsonRawText(this string? jsonText)
+        {
+            if (jsonText is null) return null;
+            StringBuilder s = new(jsonText);
+            s.Replace(",", "&#44;");
+            s.Replace("&", "&amp;");
+            s.Replace("[", "&#91;");
+            s.Replace("]", "&#93;");
+            return s.ToString();
+        }
+
+        public static string? ToJsonText(this string? jsonRawText)
+        {
+            if (jsonRawText is null) return null;
+            StringBuilder s = new(jsonRawText);
+            s.Replace("&#44;", ",");
+            s.Replace("&amp;", "&");
+            s.Replace("&#91;", "[");
+            s.Replace("&#93;", "]");
+            return s.ToString();
         }
     }
 }

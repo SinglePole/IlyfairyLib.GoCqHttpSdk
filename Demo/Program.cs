@@ -11,6 +11,16 @@ session.UseGroupMessage(async v =>
     return true; //继续向下传递
 });
 
+//好友请求示例
+session.UseFirendRequestMessage(async v =>
+{
+    if (v.Comment == "Pass")
+    {
+        v.Agree();
+    }
+    return true;
+});
+
 //复读机示例
 session.MapGroupMessage(@"^echo\s*(?<content>.*)$", async (v, group) =>
 {

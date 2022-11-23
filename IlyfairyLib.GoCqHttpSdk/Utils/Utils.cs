@@ -73,9 +73,10 @@ public static class UtilsExtentsion
         StringBuilder s = new();
         for (int i = 0; i < source.Length;)
         {
-            bool matched = false;
+            bool matched;
             do
             {
+                matched = false;
                 foreach (var kv in replacements)
                 {
                     if (i >= source.Length)
@@ -91,7 +92,10 @@ public static class UtilsExtentsion
             }
             while (matched && i < source.Length);
             if (!matched)
+            {
+                s.Append(source[i]);
                 i++;
+            }
         }
         return s.ToString();
     }

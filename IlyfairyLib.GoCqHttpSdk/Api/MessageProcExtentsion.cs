@@ -9,7 +9,7 @@ internal static class MessageProcExtentsion
 {
     internal static void Process(this Session session)
     {
-        session.WsClient.MessageReceived.Subscribe(async message =>
+        session.WsClient.MessageReceived.Subscribe(message =>
         {
             MessageEventBase? msg = null;
 
@@ -74,7 +74,7 @@ internal static class MessageProcExtentsion
 
             if (msg != null)
             {
-                await session.Distribution(msg);
+                _ = session.Distribution(msg);
             }
         });
     }

@@ -17,10 +17,10 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调</param>
-        public static Session UseFriendRequestMessage(this Session session, Func<FriendReuqestMessage, Task<bool>> func)
+        public static Session UseFriendRequestMessage(this Session session, Func<FriendRequestMessage, Task<bool>> func)
         {
             session.MessageFuncs.Add((
-                new(v => func((v as FriendReuqestMessage)!)),
+                new(v => func((v as FriendRequestMessage)!)),
                 MessageType.RequestFriend));
             return session;
         }
@@ -198,10 +198,10 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调</param>
-        public static Session UseGroupRequestMessage(this Session session, Func<GroupReuqestMessage, Task<bool>> func)
+        public static Session UseGroupRequestMessage(this Session session, Func<GroupRequestMessage, Task<bool>> func)
         {
             session.MessageFuncs.Add((
-                new(v => func((v as GroupReuqestMessage)!)),
+                new(v => func((v as GroupRequestMessage)!)),
                 MessageType.RequestGroup));
             return session;
         }

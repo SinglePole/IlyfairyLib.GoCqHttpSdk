@@ -12,7 +12,7 @@ session.UseGroupMessage(async v =>
 });
 
 //好友请求示例
-session.UseFirendRequestMessage(async v =>
+session.UseFriendRequestMessage(async v =>
 {
     if (v.Comment == "Pass")
     {

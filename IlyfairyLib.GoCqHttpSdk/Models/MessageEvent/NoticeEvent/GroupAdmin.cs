@@ -1,5 +1,4 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.Shared;
-using IlyfairyLib.GoCqHttpSdk.Models.Shared.NoticeEvent;
 using System;
 using System.Collections.Generic;
 using System.Linq;

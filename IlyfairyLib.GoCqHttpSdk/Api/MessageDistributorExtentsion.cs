@@ -1,5 +1,5 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
-using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent.RequestEvent;
+using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent.NoticeEvent;
 using IlyfairyLib.GoCqHttpSdk.Utils;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
@@ -12,6 +12,161 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
     /// </summary>
     public static class MessageDistributorExtentsion
     {
+        /// <summary>
+        /// 创建 加好友请求 中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        public static Session UseFriendRequestMessage(this Session session, Func<FriendReuqestMessage, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as FriendReuqestMessage)!)),
+                MessageType.RequestFriend));
+            return session;
+        }
+        /// <summary>
+        /// 创建群成员减少中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseGroupDecrease(this Session session, Func<GroupDecrease, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupDecrease)!)),
+                MessageType.NoticeGroupDecrease));
+            return session;
+        }
+        /// <summary>
+        /// 创建群成员增加中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseGroupIncrease(this Session session, Func<GroupIncrease, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupIncrease)!)),
+                MessageType.NoticeGroupIncrease));
+            return session;
+        }
+        /// <summary>
+        /// 创建好友添加中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseFriendAdd(this Session session, Func<FriendAdd, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as FriendAdd)!)),
+                MessageType.NoticeFriendAdd));
+            return session;
+        }
+        /// <summary>
+        /// 创建群成员荣誉变更中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseHonor(this Session session, Func<Honor, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as Honor)!)),
+                MessageType.NoticeHonor));
+            return session;
+        }
+        /// <summary>
+        /// 创建群红包运气王中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseLuckyKing(this Session session, Func<LuckyKing, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as LuckyKing)!)),
+                MessageType.NoticeLuckyKing));
+            return session;
+        }
+        /// <summary>
+        /// 创建戳一戳中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UsePoke(this Session session, Func<Poke, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as Poke)!)),
+                MessageType.NoticePoke));
+            return session;
+        }
+        /// <summary>
+        /// 创建群管理员变动中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseGroupAdmin(this Session session, Func<GroupAdmin, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupAdmin)!)),
+                MessageType.NoticeGroupAdmin));
+            return session;
+        }
+        /// <summary>
+        /// 创建群禁言中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseGroupBan(this Session session, Func<GroupBan, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupBan)!)),
+                MessageType.NoticeGroupBan));
+            return session;
+        }
+        /// <summary>
+        /// 创建群文件上传中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseGroupUpload(this Session session, Func<GroupUpload, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupUpload)!)),
+                MessageType.NoticeGroupUpload));
+            return session;
+        }
+        /// <summary>
+        /// 创建好友消息撤回中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseFriendRecall(this Session session, Func<FriendRecall, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as FriendRecall)!)),
+                MessageType.NoticeFriendRecall));
+            return session;
+        }
+        /// <summary>
+        /// 创建群消息撤回中间件
+        /// </summary>
+        /// <param name="session">会话</param>
+        /// <param name="func">回调</param>
+        /// <returns></returns>
+        public static Session UseGroupRecall(this Session session, Func<GroupRecall, Task<bool>> func)
+        {
+            session.MessageFuncs.Add((
+                new(v => func((v as GroupRecall)!)),
+                MessageType.NoticeGroupRecall));
+            return session;
+        }
         /// <summary>
         /// 创建群消息中间件
         /// </summary>
@@ -50,20 +205,15 @@ namespace IlyfairyLib.GoCqHttpSdk.Api
                 MessageType.RequestGroup));
             return session;
         }
-
         /// <summary>
-        /// 创建 好友请求 中间件
+        /// 创建 群成员增加 中间件
         /// </summary>
         /// <param name="session">会话</param>
         /// <param name="func">回调</param>
-        public static Session UseFirendRequestMessage(this Session session, Func<FriendRequestMessage, Task<bool>> func)
-        {
-            session.MessageFuncs.Add((
-                new(v => func((v as FriendRequestMessage)!)),
-                MessageType.RequestFriend));
-            return session;
-        }
+        //public static Session UserGroupMemberIncrease(this Session session, Func<GroupMemberIncrease, Task<bool>> func)
+        //{
 
+        //}
         /// <summary>
         /// 将正则表达式映射到群消息
         /// </summary>

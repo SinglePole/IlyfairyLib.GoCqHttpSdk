@@ -1,7 +1,8 @@
 ﻿using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent;
-using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent.RequestEvent;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System;
+using IlyfairyLib.GoCqHttpSdk.Models.MessageEvent.NoticeEvent;
 
 namespace IlyfairyLib.GoCqHttpSdk.Api;
 
@@ -9,14 +10,12 @@ internal static class MessageProcExtentsion
 {
     internal static void Process(this Session session)
     {
-        session.WsClient.MessageReceived.Subscribe(message =>
+        session.WsClient.MessageReceived.Subscribe(async message =>
         {
             MessageEventBase? msg = null;
-
             try
             {
                 JObject json = JObject.Parse(message.Text);
-
                 msg = json.Value<string>("post_type") switch
                 {
                     "meta_event" => json.Value<string>("meta_event_type") switch
@@ -33,31 +32,31 @@ internal static class MessageProcExtentsion
                     },
                     "notice" => json.Value<string>("notice_type") switch
                     {
-                        "group_upload" => null,
-                        "group_admin" => null,
-                        "group_decrease" => null,
-                        "group_increase" => null,
+                        "group_upload" => new GroupUpload(session, json),
+                        "group_admin" => new GroupAdmin(session, json),
+                        "group_decrease" => new GroupDecrease(session, json),
+                        "group_increase" => new GroupIncrease(session, json),
                         "group_ban" => json.Value<string>("sub_type") switch
                         {
-                            "ban" => null,
-                            "lift_ban" => null,
+                            "ban" => new GroupBan(session, json),
+                            "lift_ban" => new GroupBan(session, json),
                             _ => null,
                         },
-                        "friend_add" => null,
-                        "group_recall" => null,
-                        "friend_recall" => null,
+                        "friend_add" => new FriendAdd(session, json),
+                        "group_recall" => new GroupRecall(session, json),
+                        "friend_recall" => new FriendRecall(session, json),
                         "notify" => json.Value<string>("sub_type") switch
                         {
-                            "poke" => null,
-                            "lucky_king" => null,
-                            "honor" => null,
+                            "poke" => new Poke(session, json),
+                            "lucky_king" => new LuckyKing(session, json),
+                            "honor" => new Honor(session, json),
                             _ => null,
                         },
                         _ => null,
                     },
                     "request" => json.Value<string>("request_type") switch
                     {
-                        "friend" => new FriendRequestMessage(session,json),
+                        "friend" => new FriendReuqestMessage(session, json),
                         "group" => json.Value<string>("sub_type") switch
                         {
                             "add" => new GroupReuqestMessage(session, json),
@@ -74,7 +73,7 @@ internal static class MessageProcExtentsion
 
             if (msg != null)
             {
-                _ = session.Distribution(msg);
+                await session.Distribution(msg);
             }
         });
     }

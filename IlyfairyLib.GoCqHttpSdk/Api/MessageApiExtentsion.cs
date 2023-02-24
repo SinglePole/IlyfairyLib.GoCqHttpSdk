@@ -29,7 +29,6 @@ public static class MessageApiExtentsion
         json["params"] = @params;
         return await SendApiAsync(server, json.ToString());
     }
-
     internal static async Task<MessageApiResult> SendApiMessageAsync(Session server, ApiActionType action, JObject @params)
     {
         var result = await SendApiAsync(server, action, @params);
@@ -46,7 +45,57 @@ public static class MessageApiExtentsion
             return new MessageApiResult(null, -1, string.Empty);
         }
     }
+    /// <summary>
+    /// 获取群成员信息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="qq">QQ</param>
+    /// <param name="no_cache">是否不使用缓存（使用缓存可能更新不及时, 但响应更快）</param>
+    /// <returns>成功返回群成员信息,否则为null</returns>
+    public static async Task<GroupMemberInfo?> GetGroupMemberInfoAsync(this Session session, long groupId, long qq, bool no_cache = false)
+    {
+        var json = JsonEx.Create()
+        .Set("group_id", groupId)
+        .Set("user_id", qq)
+        .Set("no_cache", no_cache);
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupMemberInfo, json);
+        if (result.Success)
+        {
+            GroupMemberInfo info = new GroupMemberInfo();
+            info.groupId = result.Data?.Value<long>("group_id") ?? 0;
+            info.qq = result.Data?.Value<long>("user_id") ?? 0;
+            info.nickname = result.Data?.Value<string>("nickname") ?? "";
+            info.card = result.Data?.Value<string>("card") ?? "";
+            info.sex = result.Data?.Value<string>("sex") ?? "";
+            info.age = result.Data?.Value<int>("age") ?? 0;
+            info.area = result.Data?.Value<string>("area") ?? "";
+            info.join_time = result.Data?.Value<int>("join_time") ?? 0;
+            info.last_sent_time = result.Data?.Value<int>("last_sent_time") ?? 0;
+            info.level = result.Data?.Value<string>("level") ?? "";
+            info.role = result.Data?.Value<string>("role") ?? "";
+            info.unfriendly = result.Data?.Value<bool>("unfriendly") ?? false;
+            info.title = result.Data?.Value<string>("title") ?? "";
+            info.title_expire_time = result.Data?.Value<long>("title_expire_time") ?? 0;
+            info.card_changeable = result.Data?.Value<bool>("card_changeable") ?? true;
+            info.shut_up_timestamp = result.Data?.Value<long>("shut_up_timestamp") ?? 0;
+            return info;
+        }
+        return null;
+    }
+    public static async Task<GroupMemberInfo[]?> GetGroupMemberListAsync(this Session session, long groupId)
+    {
+        var json = JsonEx.Create()
+        .Set("group_id", groupId);
+        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupMemberList, json);
+        if (result.Success)
+        {
+            
 
+
+        }
+        return null;
+    }
     /// <summary>
     /// 发送群消息
     /// </summary>
@@ -69,7 +118,8 @@ public static class MessageApiExtentsion
     {
         var json = JsonEx.Create()
             .Set("group_id", groupId)
-            .Set("message", message.ToJArray());
+            .Set("message", message.ToJArray())
+            .Set("auto_escape", false);
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupMessage, json);
         if (result.Success)
         {
@@ -80,7 +130,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 发送原始CQ群消息
     /// </summary>
@@ -90,10 +139,11 @@ public static class MessageApiExtentsion
     /// <returns></returns>
     public static async Task<int?> SendRawGroupMessageAsync(this Session session, long groupId, string message)
     {
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]发送群聊消息到" + groupId + ":" + message);
         var json = JsonEx.Create()
             .Set("group_id", groupId)
-            .Set("message", message);
-
+            .Set("message", message)
+            .Set("auto_escape", false);
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupMessage, json);
         if (result.Success)
         {
@@ -104,8 +154,97 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
-
+    /// <summary>
+    /// 发送原始CQ私聊消息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="qq">QQ</param>
+    /// <param name="message">消息</param>
+    /// <returns>成功返回消息id,否则为null</returns>
+    public static async Task<int?> SendRawPrivateMessageAsync(this Session session, long qq, string message)
+    {
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]发送私聊消息到" + qq + ":" + message);
+        var json = new JsonEx();
+        json = JsonEx.Create()
+            .Set("user_id", qq)
+            .Set("message", message)
+            .Set("auto_escape", false);
+        var result = await SendApiMessageAsync(session, ApiActionType.SendPrivateMessage, json);
+        if (result.Success)
+        {
+            return result.Data?.Value<int>("message_id");
+        }
+        else
+        {
+            return null;
+        }
+    }
+    /// <summary>
+    /// 获取陌生人信息
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="qq">QQ</param>
+    /// <param name="no_cache">是否不使用缓存（使用缓存可能更新不及时, 但响应更快，默认不使用）</param>
+    /// <returns>成功返回消息id,否则为null</returns>
+    public static async Task<StrangerInfo?> GetStrangerInfoAsync(this Session session, long qq, bool no_cache = false)
+    {
+        var json = JsonEx.Create()
+            .Set("user_id", qq)
+            .Set("no_cache", no_cache);
+        var result = await SendApiMessageAsync(session, ApiActionType.GetStrangerInfo, json);
+        if (result.Success)
+        {
+            StrangerInfo info = new StrangerInfo();
+            info.qq = result.Data?.Value<long>("user_id") ?? 0;
+            info.nickname = result.Data?.Value<string>("nickname") ?? "";
+            info.sex = result.Data?.Value<string>("sex") ?? "";
+            info.age = result.Data?.Value<int>("age") ?? 0;
+            info.qid = result.Data?.Value<string>("qid") ?? "";
+            info.level = result.Data?.Value<int>("level") ?? 0;
+            info.login_days = result.Data?.Value<int>("login_days") ?? 0;
+            return info;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    /// <summary>
+    /// 群组单人禁言
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="qq">要禁言的 QQ 号</param>
+    /// <param name="duration">	禁言时长, 单位秒, 0 表示取消禁言</param>>
+    /// <returns>成功返回消息true,否则为null</returns>   
+    public static async Task<bool> SetGroupBanAsync(this Session session, long groupId, long qq, string duration)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("user_id", qq)
+            .Set("duration", duration); 
+        var result = await SendApiMessageAsync(session, ApiActionType.SetGroupBan, json);
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]置成员禁言:" + groupId + "群的成员" + qq + "禁言" + duration + "秒");
+        return result.Success;
+    }
+    /// <summary>
+    /// 群组踢人
+    /// </summary>
+    /// <param name="session"></param>
+    /// <param name="groupId">群号</param>
+    /// <param name="qq">要踢的 QQ 号</param>
+    /// <param name="reject_add_request">	拒绝此人的加群请求</param>>
+    /// <returns>该 API 无响应数据</returns>
+    public static async Task<bool> SetGroupKickAsync(this Session session, long groupId, long qq, bool reject_add_request = false)
+    {
+        var json = JsonEx.Create()
+            .Set("group_id", groupId)
+            .Set("user_id", qq)
+            .Set("reject_add_request", reject_add_request);
+        var result = await SendApiMessageAsync(session, ApiActionType.SetGroupKick, json);
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]置群员移除:" + groupId + "群的成员" + qq + "已被踢出。");
+        return result.Success;
+    }
     /// <summary>
     /// 发送私聊消息
     /// </summary>
@@ -113,13 +252,25 @@ public static class MessageApiExtentsion
     /// <param name="qq">QQ</param>
     /// <param name="message">消息</param>
     /// <returns>成功返回消息id,否则为null</returns>
-    public static async Task<int?> SendPrivateMessageAsync(this Session session, long qq, MessageBuilder message)
+    public static async Task<int?> SendPrivateMessageAsync(this Session session, long qq, MessageBuilder message,long groupId = 0)
     {
-        var json = JsonEx.Create()
-            .Set("user_id", qq)
-            .Set("message", message.ToJArray());
-
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]发送私聊消息到" + qq + ":" + message);
+        var json = new JsonEx();
+        if(groupId == 0)
+        {
+                json = JsonEx.Create()
+        .Set("user_id", qq)
+        .Set("message", message.ToJArray());
+        }
+        else
+        {
+                json = JsonEx.Create()
+        .Set("user_id", qq)
+        .Set("message", message.ToJArray())
+        .Set("group_id", groupId);
+        }
         var result = await SendApiMessageAsync(session, ApiActionType.SendPrivateMessage, json);
+
         if (result.Success)
         {
             return result.Data?.Value<int>("message_id");
@@ -129,36 +280,8 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
-    /// 发送私聊临时信息
-    /// </summary>
-    /// <param name="session"></param>
-    /// <param name="qq">QQ</param>
-    /// <param name="GroupId">通过哪个群发送临时会话（必须是管理员）</param>
-    /// <param name="message">消息</param>
-    /// <returns>成功返回消息id,否则为null</returns>
-    public static async Task<int?> SendTempPrivateMessageAsync(this Session session, long qq, long GroupId, MessageBuilder message)
-    {
-        var json = JsonEx.Create()
-            .Set("user_id", qq)
-            .Set("group_id", GroupId)
-            .Set("message", message.ToJArray());
-
-        var result = await SendApiMessageAsync(session, ApiActionType.SendPrivateMessage, json);
-        if (result.Success)
-        {
-            return result.Data?.Value<int>("message_id");
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-
-    /// <summary>
-    /// 发送消息 <br/>会根据参数自动判断发送到私聊还是群组（有问题，勿用）
+    /// 发送消息 <br/>会根据参数自动判断发送到私聊还是群组
     /// </summary>
     /// <param name="session"></param>
     /// <param name="group">群ID</param>
@@ -167,13 +290,12 @@ public static class MessageApiExtentsion
     /// <returns>成功返回消息id,否则为null</returns>
     public static async Task<int?> SendMessageAsync(this Session session, long group, long qq, MessageBuilder message)
     {
-
         var json = JsonEx.Create()
             .Set("group_id", group)
             .Set("user_id", qq)
             .Set("message", message.ToJArray());
 
-        var result = await SendApiMessageAsync(session, ApiActionType.SendMessage, json);
+        var result = await SendApiMessageAsync(session, ApiActionType.DeleteMessage, json);
         if (result.Success)
         {
             return result.Data?.Value<int>("message_id");
@@ -183,7 +305,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 获取群信息
     /// </summary>
@@ -220,7 +341,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 允许好友请求
     /// </summary>
@@ -228,7 +348,7 @@ public static class MessageApiExtentsion
     /// <param name="flag">flag</param>
     /// <param name="approve">是否同意加好友请求</param>
     /// <param name="remark">备注</param>
-    public static async Task<bool> AgreeFriendRequest(this Session session, string flag, bool approve = true, string? remark = null)
+    public static async Task<bool> AgreeFriendRequestAsync(this Session session, string flag, bool approve = true, string? remark = null)
     {
         var json = JsonEx.Create()
             .Set("flag", flag)
@@ -237,7 +357,6 @@ public static class MessageApiExtentsion
 
         return (await SendApiMessageAsync(session, ApiActionType.AgreeFriendRequest, json)).Success;
     }
-
     /// <summary>
     /// 允许加群请求
     /// </summary>
@@ -258,10 +377,17 @@ public static class MessageApiExtentsion
             })
             .Set("approve", approve)
             .Set("reason", reason);
-
+        if (approve == true)
+        {
+            Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]群申请:已同意入群申请，Flag=" + flag);
+        }
+        else
+        {
+            Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]群申请:已拒绝入群申请，Flag=" + flag);
+        }
         return (await SendApiMessageAsync(session, ApiActionType.AgreeGroupRequest, json)).Success;
-    }
 
+    }
     /// <summary>
     /// 撤回消息
     /// </summary>
@@ -270,12 +396,12 @@ public static class MessageApiExtentsion
     /// <returns></returns>
     public static async Task<bool> DeleteMessageAsync(this Session session, int messageId)
     {
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]撤回消息:" + messageId);
         JObject json = new();
         json["message_id"] = messageId;
 
-        return (await SendApiMessageAsync(session, ApiActionType.DeleteMessage, json)).Success;
+        return (await SendApiMessageAsync(session, ApiActionType.SendMessage, json)).Success;
     }
-
     /// <summary>
     /// 获取消息
     /// </summary>
@@ -296,7 +422,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 上传群文件<br/>
     /// 只能上传本地文件, 需要上传 http 文件的话请先调用 download_file API下载
@@ -318,7 +443,6 @@ public static class MessageApiExtentsion
         var result = await SendApiMessageAsync(session, ApiActionType.UploadGroupFile, json);
         return result.Success;
     }
-
     /// <summary>
     /// 获取群文件系统信息
     /// </summary>
@@ -345,7 +469,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 获取群根目录文件列表
     /// </summary>
@@ -391,7 +514,6 @@ public static class MessageApiExtentsion
             return (null, null);
         }
     }
-
     /// <summary>
     /// 获取群子目录文件列表
     /// </summary>
@@ -439,7 +561,6 @@ public static class MessageApiExtentsion
             return (null, null);
         }
     }
-
     /// <summary>
     /// 获取群文件链接
     /// </summary>
@@ -466,7 +587,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 获取合并转发内容
     /// </summary>
@@ -489,7 +609,6 @@ public static class MessageApiExtentsion
             return null;
         }
     }
-
     /// <summary>
     /// 发送合并转发 (群)
     /// </summary>
@@ -511,105 +630,52 @@ public static class MessageApiExtentsion
         var result = await SendApiMessageAsync(session, ApiActionType.SendGroupForwardMessage, json);
     }
     /// <summary>
-    /// 群组单人禁言
+    /// 群打卡
     /// </summary>
     /// <param name="session"></param>
     /// <param name="groupId">群号</param>
-    /// <param name="qq">禁言的qq</param>
-    /// <param name="duration">禁言时长</param>
-    /// <returns>返回Url</returns>
-    public static async Task SetGroupBan(this Session session, long groupId, long qq, long duration = 30 * 60)
+    /// <returns></returns>
+    public static async Task<bool> SendGroupSignAsync(this Session session,long groupId)
     {
-        var json = JsonEx.Create()
-            .Set("group_id", groupId)
-            .Set("user_id", qq)
-            .Set("duration", duration);
-
-        await SendApiMessageAsync(session, ApiActionType.SetGroupBan, json);
+        Console.WriteLine("[" + DateTime.Now.ToString() + "][↑]群打卡:" + groupId);
+        JObject json = new();
+        json["group_id"] = groupId;
+        return (await SendApiMessageAsync(session, ApiActionType.SendGroupSign, json)).Success;
     }
     /// <summary>
-    /// 群组踢人
+    /// 获取版本信息（该 API 无需参数）
     /// </summary>
     /// <param name="session"></param>
-    /// <param name="groupId">群号</param>
-    /// <param name="qq">要禁言的 QQ 号</param>
-    /// <param name="duration">	禁言时长, 单位秒, 0 表示取消禁言</param>>
-    /// <returns>成功返回消息true,否则为null</returns>
-    public static async Task<bool> SetGroupKickAsync(this Session session, long groupId, long qq, bool reject_add_request = false)
+    /// <returns></returns>
+    public static async Task<VersionInfo?> GetVersionInfoAsync(this Session session)
     {
-        var json = JsonEx.Create()
-            .Set("group_id", groupId)
-            .Set("user_id", qq)
-            .Set("reject_add_request", reject_add_request);
-        var result = await SendApiMessageAsync(session, ApiActionType.SetGroupKick, json);
-        return result.Success;
-    }
-    /// <summary>
-    /// 获取群成员信息
-    /// </summary>
-    /// <param name="session"></param>
-    /// <param name="groupId">群号</param>
-    /// <param name="qq">QQ</param>
-    /// <param name="no_cache">是否不使用缓存（使用缓存可能更新不及时, 但响应更快）</param>
-    /// <returns>成功返回群成员信息,否则为null</returns>
-    public static async Task<GroupMemberInfo?> GetGroupMemberInfoAsync(this Session session, long groupId, long qq, bool no_cache = false)
-    {
-        var json = JsonEx.Create()
-        .Set("group_id", groupId)
-        .Set("user_id", qq)
-        .Set("no_cache", no_cache);
-        var result = await SendApiMessageAsync(session, ApiActionType.GetGroupMemberInfo, json);
+        JObject json = new();
+        var result = await SendApiMessageAsync(session, ApiActionType.GetVersionInfo, json);
+        var VersionInfo = new VersionInfo();
         if (result.Success)
         {
-            GroupMemberInfo info = new GroupMemberInfo();
-            info.groupId = result.Data?.Value<long>("group_id") ?? 0;
-            info.qq = result.Data?.Value<long>("user_id") ?? 0;
-            info.nickname = result.Data?.Value<string>("nickname") ?? "";
-            info.card = result.Data?.Value<string>("card") ?? "";
-            info.sex = result.Data?.Value<string>("sex") ?? "";
-            info.age = result.Data?.Value<int>("age") ?? 0;
-            info.area = result.Data?.Value<string>("area") ?? "";
-            info.join_time = result.Data?.Value<int>("join_time") ?? 0;
-            info.last_sent_time = result.Data?.Value<int>("last_sent_time") ?? 0;
-            info.level = result.Data?.Value<string>("level") ?? "";
-            info.role = result.Data?.Value<string>("role") ?? "";
-            info.unfriendly = result.Data?.Value<bool>("unfriendly") ?? false;
-            info.title = result.Data?.Value<string>("title") ?? "";
-            info.title_expire_time = result.Data?.Value<long>("title_expire_time") ?? 0;
-            info.card_changeable = result.Data?.Value<bool>("card_changeable") ?? true;
-            info.shut_up_timestamp = result.Data?.Value<long>("shut_up_timestamp") ?? 0;
-            return info;
-        }
-        return null;
-    }
-    /// <summary>
-    /// 获取陌生人信息
-    /// </summary>
-    /// <param name="session"></param>
-    /// <param name="qq">QQ</param>
-    /// <param name="no_cache">是否不使用缓存（使用缓存可能更新不及时, 但响应更快，默认不使用）</param>
-    /// <returns>成功返回消息id,否则为null</returns>
-    public static async Task<StrangerInfo?> GetStrangerInfoAsync(this Session session, long qq, bool no_cache = false)
-    {
-        var json = JsonEx.Create()
-            .Set("user_id", qq)
-            .Set("no_cache", no_cache);
-        var result = await SendApiMessageAsync(session, ApiActionType.GetStrangerInfo, json);
-        if (result.Success)
-        {
-            StrangerInfo info = new StrangerInfo();
-            info.qq = result.Data?.Value<long>("user_id") ?? 0;
-            info.nickname = result.Data?.Value<string>("nickname") ?? "";
-            info.sex = result.Data?.Value<string>("sex") ?? "";
-            info.age = result.Data?.Value<int>("age") ?? 0;
-            info.qid = result.Data?.Value<string>("qid") ?? "";
-            info.level = result.Data?.Value<int>("level") ?? 0;
-            info.login_days = result.Data?.Value<int>("login_days") ?? 0;
-            return info;
+            VersionInfo.app_name = result.Data?.Value<string>("app_name") ?? "go-cqhttp";
+            VersionInfo.app_version = result.Data?.Value<string>("app_version") ?? "";
+            VersionInfo.app_full_name = result.Data?.Value<string>("app_full_name") ?? "";
+            VersionInfo.protocol_version = result.Data?.Value<string>("protocol_version") ?? "";
+            VersionInfo.coolq_edition = result.Data?.Value<string>("coolq_edition") ?? "pro";
+            VersionInfo.coolq_directory = result.Data?.Value<string>("coolq_directory") ?? "";
+            VersionInfo.go_cqhttp = result.Data?.Value<bool>("go-cqhttp") ?? true;
+            VersionInfo.plugin_version = result.Data?.Value<string>("plugin_version") ?? "4.15.0";
+            VersionInfo.plugin_build_number = result.Data?.Value<int>("plugin_build_number") ?? 99;
+            VersionInfo.plugin_build_configuration = result.Data?.Value<string>("plugin_build_configuration") ?? "plugin_build_configuration";
+            VersionInfo.runtime_version = result.Data?.Value<string>("runtime_version") ?? "";
+            VersionInfo.runtime_os = result.Data?.Value<string>("runtime_os") ?? "";
+            VersionInfo.version = result.Data?.Value<string>("version") ?? "";
+            VersionInfo.protocol = result.Data?.Value<int>("protocol") ?? -1;
+            return VersionInfo;
         }
         else
         {
             return null;
         }
     }
+
+
 }
+

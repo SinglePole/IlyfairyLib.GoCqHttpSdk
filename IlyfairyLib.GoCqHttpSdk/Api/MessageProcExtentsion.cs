@@ -56,11 +56,11 @@ internal static class MessageProcExtentsion
                     },
                     "request" => json.Value<string>("request_type") switch
                     {
-                        "friend" => new FriendReuqestMessage(session, json),
+                        "friend" => new FriendRequestMessage(session, json),
                         "group" => json.Value<string>("sub_type") switch
                         {
-                            "add" => new GroupReuqestMessage(session, json),
-                            "invite" => new GroupReuqestMessage(session, json),
+                            "add" => new GroupRequestMessage(session, json),
+                            "invite" => new GroupRequestMessage(session, json),
                             _ => null,
                         },
                         _ => null,
